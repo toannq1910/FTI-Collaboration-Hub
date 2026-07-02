@@ -1,6 +1,6 @@
 /* v9.4.0 Unified Product CMS bridge */
 import { loadCms, saveCms, toast, esc } from './cms/cms-core.js';
-import { renderAssetManager, bindAssetManager } from './cms/cms-assets.js';
+import { renderAssetManager, bindAssetManager } from './cms/cms-assets.js?v=20260701-6';
 
 function isProductCenter(){ return location.hash === '#oncallcx-product-center'; }
 

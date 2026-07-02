@@ -318,6 +318,8 @@ export function bindPageBuilder(data, renderCms){
     const current = collectPage(page);
     current.sections.push(defaultSection($('#pbSectionType')?.value || 'text'));
     next.pages[idx] = current;
+    saveCms(next);
+    toast('Đã thêm section.');
     rerender(next);
   });
 
@@ -335,6 +337,8 @@ export function bindPageBuilder(data, renderCms){
     const current = collectPage(page);
     current.sections.splice(i,1);
     next.pages[idx] = current;
+    saveCms(next);
+    toast('Đã xóa section.');
     rerender(next);
   });
 
@@ -346,6 +350,8 @@ export function bindPageBuilder(data, renderCms){
     const current = collectPage(page);
     [current.sections[i-1], current.sections[i]] = [current.sections[i], current.sections[i-1]];
     next.pages[idx] = current;
+    saveCms(next);
+    toast('Đã di chuyển section.');
     rerender(next);
   });
 
@@ -357,6 +363,8 @@ export function bindPageBuilder(data, renderCms){
     const current = collectPage(page);
     [current.sections[i+1], current.sections[i]] = [current.sections[i], current.sections[i+1]];
     next.pages[idx] = current;
+    saveCms(next);
+    toast('Đã di chuyển section.');
     rerender(next);
   });
 }
