@@ -897,4 +897,3 @@ document.addEventListener('click', event => {
 window.addEventListener('hashchange', scheduleGuideRender);
 window.addEventListener('DOMContentLoaded', scheduleGuideRender);
 scheduleGuideRender();
-
