@@ -1,36 +1,46 @@
 {
   "meta": {
-    "version": "v9.8.2",
+    "version": "v9.5.0",
     "name": "Unified Product CMS",
-    "updatedAt": "2026-06-26",
-    "description": "Operational CMS Guide and Sidebar Articles migration."
+    "updatedAt": "2026-06-29",
+    "description": "Operational CMS Guide and Sidebar Articles migration.",
+    "cmsCoverage": "full-content-sync",
+    "cmsCoverageUpdatedAt": "2026-06-26T10:53:22.714Z",
+    "oncallcxReclass": "v10.8.3-oncallcx-family-reclass",
+    "oncallcxReclassUpdatedAt": "2026-06-26T22:24:03.846Z",
+    "oncallcxProductPortal": "v10.9.0-oncallcx-product-portal",
+    "oncallcxProductPortalUpdatedAt": "2026-06-27T00:04:17.541Z",
+    "oncallcxUcaasCard": "v10.8.4",
+    "oncallcxUcaasCardUpdatedAt": "2026-06-26T23:40:11.327Z",
+    "oncallcxProductDocumentMetadata": "v10.8.6-oncallcx-product-document-metadata",
+    "oncallcxProductDocumentMetadataUpdatedAt": "2026-06-26T23:40:44.797Z"
   },
   "products": [
     {
-      "id": "oncallcx",
-      "title": "OncallCX - Contact Center As A Service",
-      "subtitle": "Cloud Contact Center Platform",
-      "category": "FPT / CCaaS",
+      "id": "oncallcx-as7-ucaas",
+      "title": "OnCallCX AS7 - UCaaS",
+      "subtitle": "OncallCX PBX",
+      "category": "OnCallCX",
       "vendor": "FPT Telecom",
-      "status": "active",
+      "status": "draft",
       "score": "9/10",
-      "summary": "OncallCX là nền tảng Contact Center as a Service do FPT Telecom phát triển, hỗ trợ doanh nghiệp triển khai tổng đài chăm sóc khách hàng trên Cloud, mở rộng linh hoạt và tích hợp với CRM, ERP, AI Bot, REST API và Webhook.",
+      "summary": "Phân hệ Contact Center của OnCallCX, gồm AI Voicebot, Omnichannel, Analytics, Recording, Campaign và CRM/ERP Integration.",
       "tags": [
-        "FPT",
-        "CCaaS",
-        "Omnichannel",
-        "AI",
-        "CRM Integration"
+        "oncallcx",
+        "ccaas",
+        "ai-voicebot",
+        "omnichannel",
+        "analytics",
+        "recording",
+        "crm-integration"
       ],
       "highlights": [
-        "Omnichannel Contact Center",
-        "Voice / Chat / Email / Social",
-        "AI Voicebot & Chatbot",
-        "Call Recording",
-        "Dashboard & Realtime Report",
-        "CRM / ERP Integration",
-        "Workflow Automation",
-        "Open REST API & Webhook"
+        "AI Voicebot",
+        "Omnichannel",
+        "Analytics",
+        "Recording",
+        "Campaign",
+        "CRM/ERP Integration"
       ],
       "useCases": [
         "Enterprise",
@@ -153,44 +163,713 @@
       ],
       "apiLinks": [
         {
-          "name": "CDR API",
           "method": "GET",
-          "path": "/api/cdr/list",
-          "description": "Lấy danh sách lịch sử cuộc gọi."
+          "path": "/ucaas/extensions",
+          "description": "UCaaS - danh sách extension"
         },
         {
-          "name": "Outbound Call",
           "method": "POST",
-          "path": "/api/call/outbound",
-          "description": "Khởi tạo cuộc gọi từ CRM."
+          "path": "/ucaas/extensions",
+          "description": "UCaaS - tạo extension"
         },
         {
-          "name": "Webhook Incoming",
-          "method": "POST",
-          "path": "/webhook/incoming",
-          "description": "Nhận sự kiện cuộc gọi realtime."
-        },
-        {
-          "name": "Recording API",
           "method": "GET",
-          "path": "/api/recording/{id}",
-          "description": "Truy xuất thông tin ghi âm."
+          "path": "/ucaas/cdr",
+          "description": "UCaaS - truy vấn CDR"
+        },
+        {
+          "method": "POST",
+          "path": "/ccaas/call/outbound",
+          "description": "CCaaS - khởi tạo outbound call"
+        },
+        {
+          "method": "POST",
+          "path": "/ccaas/webhook/incoming",
+          "description": "CCaaS - nhận event cuộc gọi realtime"
+        },
+        {
+          "method": "GET",
+          "path": "/ccaas/recording/{id}",
+          "description": "CCaaS - truy xuất ghi âm"
         }
       ],
       "knowledgeSections": [
         {
-          "title": "Kiến trúc triển khai",
-          "content": "OncallCX có thể triển khai theo mô hình Cloud Contact Center, BYOC/SIP trunk, tích hợp CRM/ERP và AI Bot qua API/Webhook."
+          "title": "Scope",
+          "content": "OnCallCX CCaaS bao gồm toàn bộ tính năng Contact Center: AI Voicebot, Omnichannel, Analytics, Recording và tích hợp CRM/ERP."
         },
         {
-          "title": "Thông tin cần thu thập khi Presales",
-          "content": "Số agent, kênh tương tác, đầu số, CRM, kịch bản IVR, báo cáo, lưu trữ ghi âm, yêu cầu tích hợp và tiêu chí nghiệm thu."
+          "title": "Relationship",
+          "content": "Có thể dùng OnCallCX UCaaS làm PBX/telephony foundation nhưng UCaaS và CCaaS là hai phân hệ khác nhau."
+        }
+      ],
+      "subCategory": "CCaaS",
+      "parent": "oncallcx",
+      "route": "#oncallcx-ccaas",
+      "family": "OnCallCX",
+      "type": "product-portal",
+      "description": "OnCallCX được tổ chức theo mô hình Product Portal. UCaaS tập trung vào telephony/PBX foundation, còn CCaaS tập trung vào vận hành Contact Center, AI Voicebot, Omnichannel, Recording, Analytics, Campaign và CRM/ERP Integration.",
+      "modules": [
+        "oncallcx-ucaas",
+        "oncallcx-ccaas"
+      ],
+      "documents": [
+        "presentation-oncallcx",
+        "datasheet-oncallcx-ucaas",
+        "datasheet-oncallcx-ccaas",
+        "demo-script-oncallcx",
+        "api-spec-oncallcx"
+      ],
+      "relationshipModel": "Product -> Module -> Feature -> API -> Document -> Demo",
+      "productModules": [
+        {
+          "id": "oncallcx-ucaas",
+          "parent": "oncallcx",
+          "title": "OnCallCX UCaaS",
+          "label": "UCaaS",
+          "route": "#oncallcx-ucaas",
+          "badge": "PBX",
+          "icon": "☎️",
+          "subtitle": "Cloud PBX · Enterprise Telephony",
+          "summary": "Phân hệ tổng đài PBX cloud/hosted: Extension, User, SIP Trunk, Number Plan, Call Routing, IVR, Ring Group, Voicemail và API-ready integration.",
+          "scope": "OnCallCX UCaaS chỉ thuần về tổng đài PBX và telephony foundation.",
+          "tags": [
+            "PBX",
+            "Extension",
+            "SIP Trunk",
+            "Call Routing",
+            "API-ready"
+          ],
+          "features": [
+            {
+              "title": "Cloud PBX",
+              "summary": "Tổng đài PBX cloud/hosted, quản lý extension và user tập trung."
+            },
+            {
+              "title": "Extension / User",
+              "summary": "Tạo extension, user, voicemail, quyền gọi và nhóm người dùng."
+            },
+            {
+              "title": "SIP Trunk",
+              "summary": "Kết nối đầu số, SIP trunk, DID, outbound/inbound route và prefix."
+            },
+            {
+              "title": "IVR / Ring Group",
+              "summary": "Cấu hình lời chào, IVR, ring group và call distribution cơ bản."
+            },
+            {
+              "title": "CDR / Call Log",
+              "summary": "Ghi nhận lịch sử cuộc gọi, trạng thái, thời lượng và metadata cơ bản."
+            },
+            {
+              "title": "API-ready",
+              "summary": "API chờ tích hợp cho provisioning, CDR, click-to-call hoặc CRM extension."
+            }
+          ],
+          "apiLinks": [
+            {
+              "method": "GET",
+              "path": "/ucaas/extensions",
+              "description": "Danh sách extension"
+            },
+            {
+              "method": "POST",
+              "path": "/ucaas/extensions",
+              "description": "Tạo extension"
+            },
+            {
+              "method": "PATCH",
+              "path": "/ucaas/extensions/{id}",
+              "description": "Cập nhật extension"
+            },
+            {
+              "method": "GET",
+              "path": "/ucaas/cdr",
+              "description": "Truy vấn CDR UCaaS"
+            },
+            {
+              "method": "POST",
+              "path": "/ucaas/click-to-call",
+              "description": "Click-to-call từ hệ thống tích hợp"
+            }
+          ],
+          "documents": [
+            "datasheet-oncallcx-ucaas",
+            "ucaas-api-spec",
+            "ucaas-deployment-checklist"
+          ],
+          "demo": [
+            "ucaas-extension-provisioning",
+            "ucaas-call-routing-demo"
+          ],
+          "notIncluded": [
+            "AI Voicebot",
+            "Omnichannel",
+            "Advanced Analytics",
+            "Recording QA/QC",
+            "Campaign",
+            "CRM workflow"
+          ]
         },
         {
-          "title": "Kịch bản demo đề xuất",
-          "content": "Login portal, tạo agent/extension, nhận cuộc gọi inbound, gọi outbound từ CRM, xem CDR, nghe recording và xem dashboard realtime."
+          "id": "oncallcx-ccaas",
+          "parent": "oncallcx",
+          "title": "OnCallCX CCaaS",
+          "label": "CCaaS",
+          "route": "#oncallcx-ccaas",
+          "badge": "Contact Center",
+          "icon": "🎧",
+          "subtitle": "Contact Center · AI · Omnichannel",
+          "summary": "Phân hệ Contact Center: AI Voicebot, Omnichannel, Analytics/Dashboard, Recording, Campaign/Outbound và CRM/ERP Integration.",
+          "scope": "OnCallCX CCaaS là lớp vận hành chăm sóc khách hàng và contact center.",
+          "tags": [
+            "AI Voicebot",
+            "Omnichannel",
+            "Analytics",
+            "Recording",
+            "CRM/ERP Integration"
+          ],
+          "features": [
+            {
+              "title": "AI Voicebot",
+              "summary": "Tự động hóa cuộc gọi, kịch bản thoại, chuyển agent và ghi nhận kết quả."
+            },
+            {
+              "title": "Omnichannel",
+              "summary": "Voice, Chat, Email, Social và digital channels trong cùng hàng đợi."
+            },
+            {
+              "title": "Analytics / Dashboard",
+              "summary": "Realtime dashboard, agent performance, queue, SLA và campaign report."
+            },
+            {
+              "title": "Recording",
+              "summary": "Ghi âm, tra soát, QA/QC và báo cáo lịch sử cuộc gọi."
+            },
+            {
+              "title": "Campaign / Outbound",
+              "summary": "Telesales, gọi ra tự động, campaign list và tracking kết quả."
+            },
+            {
+              "title": "CRM/ERP Integration",
+              "summary": "Screen pop, ticket, customer sync, call log và workflow CSKH."
+            }
+          ],
+          "apiLinks": [
+            {
+              "method": "POST",
+              "path": "/ccaas/call/outbound",
+              "description": "Khởi tạo outbound call"
+            },
+            {
+              "method": "POST",
+              "path": "/ccaas/webhook/incoming",
+              "description": "Nhận event cuộc gọi realtime"
+            },
+            {
+              "method": "POST",
+              "path": "/ccaas/campaign",
+              "description": "Tạo/cập nhật campaign"
+            },
+            {
+              "method": "GET",
+              "path": "/ccaas/queue/status",
+              "description": "Trạng thái queue/agent"
+            },
+            {
+              "method": "GET",
+              "path": "/ccaas/recording/{id}",
+              "description": "Truy xuất ghi âm"
+            }
+          ],
+          "documents": [
+            "datasheet-oncallcx-ccaas",
+            "ccaas-api-spec",
+            "ccaas-crm-integration-guide"
+          ],
+          "demo": [
+            "ccaas-inbound-screenpop",
+            "ccaas-outbound-campaign",
+            "ccaas-dashboard-demo"
+          ],
+          "included": [
+            "AI Voicebot",
+            "Omnichannel",
+            "Analytics/Dashboard",
+            "Recording",
+            "Campaign",
+            "CRM/ERP Integration"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "from": "oncallcx",
+          "to": "oncallcx-ucaas",
+          "type": "has-module"
+        },
+        {
+          "from": "oncallcx",
+          "to": "oncallcx-ccaas",
+          "type": "has-module"
+        },
+        {
+          "from": "oncallcx-ucaas",
+          "to": "api-reference",
+          "type": "uses-api"
+        },
+        {
+          "from": "oncallcx-ccaas",
+          "to": "api-reference",
+          "type": "uses-api"
+        },
+        {
+          "from": "oncallcx-ccaas",
+          "to": "crm",
+          "type": "integrates-with"
+        },
+        {
+          "from": "oncallcx",
+          "to": "document-center",
+          "type": "has-document"
+        },
+        {
+          "from": "oncallcx",
+          "to": "demo",
+          "type": "has-demo"
         }
       ]
+    },
+    {
+      "id": "oncallcx",
+      "title": "OnCallCX",
+      "subtitle": "Cloud Contact Center Platform",
+      "category": "Contact Center",
+      "vendor": "FPT Telecom",
+      "status": "active",
+      "score": "9/10",
+      "summary": "OnCallCX là nền tảng Customer Experience Platform của FPT, bao gồm hai phân hệ độc lập: UCaaS cho tổng đài PBX và CCaaS cho Contact Center.",
+      "tags": [
+        "oncallcx",
+        "product-portal",
+        "ucaas",
+        "ccaas",
+        "customer-experience",
+        "fpt"
+      ],
+      "highlights": [
+        "Omnichannel Contact Center",
+        "Voice / Chat / Email / Social",
+        "AI Voicebot & Chatbot",
+        "Call Recording",
+        "Dashboard & Realtime Report",
+        "CRM / ERP Integration"
+      ],
+      "useCases": [
+        "Enterprise",
+        "Banking",
+        "Finance",
+        "Insurance",
+        "Healthcare",
+        "Retail",
+        "Logistics",
+        "Government"
+      ],
+      "website": "https://oncallcx.vn",
+      "overview": "OncallCX là nền tảng Contact Center as a Service do FPT Telecom phát triển, hỗ trợ doanh nghiệp triển khai tổng đài chăm sóc khách hàng trên Cloud, mở rộng linh hoạt và tích hợp với CRM, ERP, AI Bot, REST API và Webhook.",
+      "businessValue": [
+        "Rút ngắn thời gian tư vấn và trình bày giải pháp.",
+        "Chuẩn hóa thông tin sản phẩm cho Presales.",
+        "Kết nối bài viết, tài liệu, presentation và API trong một trang."
+      ],
+      "targetCustomers": [
+        "Enterprise",
+        "Banking",
+        "Finance",
+        "Insurance",
+        "Healthcare",
+        "Retail",
+        "Logistics",
+        "Government"
+      ],
+      "sections": [
+        {
+          "title": "Tổng quan giải pháp",
+          "content": "OncallCX là nền tảng Contact Center as a Service do FPT Telecom phát triển, hỗ trợ doanh nghiệp triển khai tổng đài chăm sóc khách hàng trên Cloud, mở rộng linh hoạt và tích hợp với CRM, ERP, AI Bot, REST API và Webhook."
+        },
+        {
+          "title": "Tính năng nổi bật",
+          "content": "Các tính năng được quản lý trong CMS và hiển thị tự động tại trang chi tiết."
+        },
+        {
+          "title": "Kịch bản tư vấn",
+          "content": "Presales có thể dùng trang này để trình bày nhanh giá trị, đối tượng phù hợp và tài liệu liên quan."
+        }
+      ],
+      "relatedAssets": [],
+      "relationships": [
+        {
+          "type": "integrates_with",
+          "target": "webex-contact-center",
+          "label": "Collaboration ecosystem"
+        },
+        {
+          "type": "compare_with",
+          "target": "zoom-contact-center",
+          "label": "Cloud CCaaS comparison"
+        }
+      ],
+      "integrations": [
+        {
+          "name": "CRM / ERP",
+          "items": [
+            "Salesforce",
+            "Microsoft Dynamics",
+            "Getfly CRM",
+            "MISA AMIS",
+            "CloudGO",
+            "Base.vn"
+          ]
+        },
+        {
+          "name": "PBX / SIP",
+          "items": [
+            "Cisco CUCM",
+            "Asterisk",
+            "3CX",
+            "Ribbon SBC",
+            "VNPT SIP Trunk"
+          ]
+        },
+        {
+          "name": "AI",
+          "items": [
+            "Voicebot",
+            "Chatbot",
+            "Call Summary",
+            "QA/QC",
+            "Sentiment Analysis"
+          ]
+        },
+        {
+          "name": "API",
+          "items": [
+            "REST API",
+            "Webhook",
+            "CDR API",
+            "Recording API",
+            "Campaign API"
+          ]
+        }
+      ],
+      "competitors": [
+        {
+          "name": "Genesys Cloud CX",
+          "position": "Enterprise global CCaaS",
+          "note": "Mạnh về enterprise CX, global deployment và analytics."
+        },
+        {
+          "name": "NICE CXone",
+          "position": "Enterprise AI-first CCaaS",
+          "note": "Mạnh về workforce engagement và AI analytics."
+        },
+        {
+          "name": "Zoom Contact Center",
+          "position": "Cloud native / video-first",
+          "note": "Phù hợp khách hàng đã dùng hệ sinh thái Zoom."
+        },
+        {
+          "name": "Webex Contact Center",
+          "position": "Cisco collaboration ecosystem",
+          "note": "Phù hợp khách hàng Cisco/Webex."
+        }
+      ],
+      "apiLinks": [
+        {
+          "method": "GET",
+          "path": "/ucaas/extensions",
+          "description": "UCaaS - danh sách extension"
+        },
+        {
+          "method": "POST",
+          "path": "/ucaas/extensions",
+          "description": "UCaaS - tạo extension"
+        },
+        {
+          "method": "GET",
+          "path": "/ucaas/cdr",
+          "description": "UCaaS - truy vấn CDR"
+        },
+        {
+          "method": "POST",
+          "path": "/ccaas/call/outbound",
+          "description": "CCaaS - khởi tạo outbound call"
+        },
+        {
+          "method": "POST",
+          "path": "/ccaas/webhook/incoming",
+          "description": "CCaaS - nhận event cuộc gọi realtime"
+        },
+        {
+          "method": "GET",
+          "path": "/ccaas/recording/{id}",
+          "description": "CCaaS - truy xuất ghi âm"
+        }
+      ],
+      "knowledgeSections": [
+        {
+          "title": "Product Portal Model",
+          "content": "OnCallCX là Product Portal. UCaaS và CCaaS là hai Product Module bên trong, không phải ba sản phẩm ngang hàng."
+        },
+        {
+          "title": "UCaaS vs CCaaS",
+          "content": "UCaaS là PBX/telephony foundation. CCaaS là Contact Center/CX operation layer."
+        }
+      ],
+      "subCategory": "CCaaS",
+      "parent": "oncallcx",
+      "route": "#oncallcx",
+      "family": "OnCallCX",
+      "type": "product-portal",
+      "description": "OnCallCX được tổ chức theo mô hình Product Portal. UCaaS tập trung vào telephony/PBX foundation, còn CCaaS tập trung vào vận hành Contact Center, AI Voicebot, Omnichannel, Recording, Analytics, Campaign và CRM/ERP Integration.",
+      "modules": [
+        "oncallcx-ucaas",
+        "oncallcx-ccaas"
+      ],
+      "documents": [
+        "presentation-oncallcx",
+        "datasheet-oncallcx-ucaas",
+        "datasheet-oncallcx-ccaas",
+        "demo-script-oncallcx",
+        "api-spec-oncallcx"
+      ],
+      "relationshipModel": "Product -> Module -> Feature -> API -> Document -> Demo",
+      "productModules": [
+        {
+          "id": "oncallcx-ucaas",
+          "parent": "oncallcx",
+          "title": "OnCallCX UCaaS",
+          "label": "UCaaS",
+          "route": "#oncallcx-ucaas",
+          "badge": "PBX",
+          "icon": "☎️",
+          "subtitle": "Cloud PBX · Enterprise Telephony",
+          "summary": "Phân hệ tổng đài PBX cloud/hosted: Extension, User, SIP Trunk, Number Plan, Call Routing, IVR, Ring Group, Voicemail và API-ready integration.",
+          "scope": "OnCallCX UCaaS chỉ thuần về tổng đài PBX và telephony foundation.",
+          "tags": [
+            "PBX",
+            "Extension",
+            "SIP Trunk",
+            "Call Routing",
+            "API-ready"
+          ],
+          "features": [
+            {
+              "title": "Cloud PBX",
+              "summary": "Tổng đài PBX cloud/hosted, quản lý extension và user tập trung."
+            },
+            {
+              "title": "Extension / User",
+              "summary": "Tạo extension, user, voicemail, quyền gọi và nhóm người dùng."
+            },
+            {
+              "title": "SIP Trunk",
+              "summary": "Kết nối đầu số, SIP trunk, DID, outbound/inbound route và prefix."
+            },
+            {
+              "title": "IVR / Ring Group",
+              "summary": "Cấu hình lời chào, IVR, ring group và call distribution cơ bản."
+            },
+            {
+              "title": "CDR / Call Log",
+              "summary": "Ghi nhận lịch sử cuộc gọi, trạng thái, thời lượng và metadata cơ bản."
+            },
+            {
+              "title": "API-ready",
+              "summary": "API chờ tích hợp cho provisioning, CDR, click-to-call hoặc CRM extension."
+            }
+          ],
+          "apiLinks": [
+            {
+              "method": "GET",
+              "path": "/ucaas/extensions",
+              "description": "Danh sách extension"
+            },
+            {
+              "method": "POST",
+              "path": "/ucaas/extensions",
+              "description": "Tạo extension"
+            },
+            {
+              "method": "PATCH",
+              "path": "/ucaas/extensions/{id}",
+              "description": "Cập nhật extension"
+            },
+            {
+              "method": "GET",
+              "path": "/ucaas/cdr",
+              "description": "Truy vấn CDR UCaaS"
+            },
+            {
+              "method": "POST",
+              "path": "/ucaas/click-to-call",
+              "description": "Click-to-call từ hệ thống tích hợp"
+            }
+          ],
+          "documents": [
+            "datasheet-oncallcx-ucaas",
+            "ucaas-api-spec",
+            "ucaas-deployment-checklist"
+          ],
+          "demo": [
+            "ucaas-extension-provisioning",
+            "ucaas-call-routing-demo"
+          ],
+          "notIncluded": [
+            "AI Voicebot",
+            "Omnichannel",
+            "Advanced Analytics",
+            "Recording QA/QC",
+            "Campaign",
+            "CRM workflow"
+          ]
+        },
+        {
+          "id": "oncallcx-ccaas",
+          "parent": "oncallcx",
+          "title": "OnCallCX CCaaS",
+          "label": "CCaaS",
+          "route": "#oncallcx-ccaas",
+          "badge": "Contact Center",
+          "icon": "🎧",
+          "subtitle": "Contact Center · AI · Omnichannel",
+          "summary": "Phân hệ Contact Center: AI Voicebot, Omnichannel, Analytics/Dashboard, Recording, Campaign/Outbound và CRM/ERP Integration.",
+          "scope": "OnCallCX CCaaS là lớp vận hành chăm sóc khách hàng và contact center.",
+          "tags": [
+            "AI Voicebot",
+            "Omnichannel",
+            "Analytics",
+            "Recording",
+            "CRM/ERP Integration"
+          ],
+          "features": [
+            {
+              "title": "AI Voicebot",
+              "summary": "Tự động hóa cuộc gọi, kịch bản thoại, chuyển agent và ghi nhận kết quả."
+            },
+            {
+              "title": "Omnichannel",
+              "summary": "Voice, Chat, Email, Social và digital channels trong cùng hàng đợi."
+            },
+            {
+              "title": "Analytics / Dashboard",
+              "summary": "Realtime dashboard, agent performance, queue, SLA và campaign report."
+            },
+            {
+              "title": "Recording",
+              "summary": "Ghi âm, tra soát, QA/QC và báo cáo lịch sử cuộc gọi."
+            },
+            {
+              "title": "Campaign / Outbound",
+              "summary": "Telesales, gọi ra tự động, campaign list và tracking kết quả."
+            },
+            {
+              "title": "CRM/ERP Integration",
+              "summary": "Screen pop, ticket, customer sync, call log và workflow CSKH."
+            }
+          ],
+          "apiLinks": [
+            {
+              "method": "POST",
+              "path": "/ccaas/call/outbound",
+              "description": "Khởi tạo outbound call"
+            },
+            {
+              "method": "POST",
+              "path": "/ccaas/webhook/incoming",
+              "description": "Nhận event cuộc gọi realtime"
+            },
+            {
+              "method": "POST",
+              "path": "/ccaas/campaign",
+              "description": "Tạo/cập nhật campaign"
+            },
+            {
+              "method": "GET",
+              "path": "/ccaas/queue/status",
+              "description": "Trạng thái queue/agent"
+            },
+            {
+              "method": "GET",
+              "path": "/ccaas/recording/{id}",
+              "description": "Truy xuất ghi âm"
+            }
+          ],
+          "documents": [
+            "datasheet-oncallcx-ccaas",
+            "ccaas-api-spec",
+            "ccaas-crm-integration-guide"
+          ],
+          "demo": [
+            "ccaas-inbound-screenpop",
+            "ccaas-outbound-campaign",
+            "ccaas-dashboard-demo"
+          ],
+          "included": [
+            "AI Voicebot",
+            "Omnichannel",
+            "Analytics/Dashboard",
+            "Recording",
+            "Campaign",
+            "CRM/ERP Integration"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "from": "oncallcx",
+          "to": "oncallcx-ucaas",
+          "type": "has-module"
+        },
+        {
+          "from": "oncallcx",
+          "to": "oncallcx-ccaas",
+          "type": "has-module"
+        },
+        {
+          "from": "oncallcx-ucaas",
+          "to": "api-reference",
+          "type": "uses-api"
+        },
+        {
+          "from": "oncallcx-ccaas",
+          "to": "api-reference",
+          "type": "uses-api"
+        },
+        {
+          "from": "oncallcx-ccaas",
+          "to": "crm",
+          "type": "integrates-with"
+        },
+        {
+          "from": "oncallcx",
+          "to": "document-center",
+          "type": "has-document"
+        },
+        {
+          "from": "oncallcx",
+          "to": "demo",
+          "type": "has-demo"
+        }
+      ],
+      "suitable": [
+        "Enterprise",
+        "Banking",
+        "Finance",
+        "Retail",
+        "CSKH"
+      ],
+      "presentationId": "presentation-oncallcx-ccaas"
     },
     {
       "id": "webex-contact-center",
@@ -198,7 +877,7 @@
       "subtitle": "Enterprise Contact Center",
       "category": "Global CCaaS",
       "vendor": "Cisco",
-      "status": "reference",
+      "status": "active",
       "score": "8/10",
       "summary": "Webex Contact Center là nền tảng Contact Center cloud của Cisco, phù hợp doanh nghiệp cần tích hợp sâu hệ sinh thái Webex, collaboration và omnichannel customer experience.",
       "tags": [
@@ -257,7 +936,7 @@
       "subtitle": "Video-first CCaaS",
       "category": "Global CCaaS",
       "vendor": "Zoom",
-      "status": "reference",
+      "status": "active",
       "score": "8/10",
       "summary": "Zoom Contact Center phù hợp khách hàng đang dùng hệ sinh thái Zoom và cần mở rộng sang chăm sóc khách hàng đa kênh.",
       "tags": [
@@ -309,6 +988,532 @@
       "competitors": [],
       "apiLinks": [],
       "knowledgeSections": []
+    },
+    {
+      "id": "vc-yealink-a40",
+      "title": "Yealink Meeting Bar A40",
+      "category": "Video Conference",
+      "vendor": "Yealink",
+      "route": "#vc-yealink",
+      "summary": "AI-powered all-in-one video bar với dual 48MP camera, Android 13, IntelliFocus và chứng nhận Teams/Zoom/Google Meet.",
+      "tags": [
+        "video-conference",
+        "yealink",
+        "meeting-bar",
+        "a40",
+        "teams",
+        "zoom"
+      ],
+      "highlights": [
+        "2×48MP AI Camera",
+        "Android 13",
+        "IntelliFocus",
+        "Speaker Tracking",
+        "Teams/Zoom/Meet Certified"
+      ],
+      "apiLinks": [],
+      "integrations": [
+        {
+          "name": "Meeting Platforms",
+          "items": [
+            "Microsoft Teams Rooms",
+            "Zoom Rooms",
+            "Google Meet"
+          ]
+        }
+      ],
+      "knowledgeSections": [
+        {
+          "title": "Presales Fit",
+          "content": "Phù hợp huddle/small/medium room cần triển khai nhanh, all-in-one và chi phí tốt."
+        },
+        {
+          "title": "Weak Point",
+          "content": "Boardroom lớn cần bổ sung mic/AV design."
+        }
+      ],
+      "documents": [
+        "doc-vc-yealink-datasheet",
+        "doc-vc-yealink-quickstart"
+      ],
+      "relationships": [],
+      "competitors": [],
+      "subtitle": "",
+      "status": "active",
+      "score": "",
+      "website": "",
+      "useCases": []
+    },
+    {
+      "id": "vc-logitech-rally-bar",
+      "title": "Logitech Rally Bar",
+      "category": "Video Conference",
+      "vendor": "Logitech",
+      "route": "#vc-logitech",
+      "summary": "Video bar với RightSight AI, CollabOS, Scribe, Tap Scheduler, Mic Pods, SWYTCH và Logitech Sync.",
+      "tags": [
+        "video-conference",
+        "logitech",
+        "rally-bar",
+        "collabos",
+        "scribe",
+        "swytch"
+      ],
+      "highlights": [
+        "RightSight AI",
+        "CollabOS",
+        "SWYTCH BYOD",
+        "Scribe Whiteboard",
+        "Logitech Sync"
+      ],
+      "integrations": [
+        {
+          "name": "Meeting Platforms",
+          "items": [
+            "Microsoft Teams Rooms",
+            "Zoom Rooms",
+            "Google Meet",
+            "Webex"
+          ]
+        }
+      ],
+      "knowledgeSections": [
+        {
+          "title": "Presales Fit",
+          "content": "Phù hợp enterprise/hybrid workplace cần ecosystem đầy đủ và BYOD mạnh."
+        },
+        {
+          "title": "Weak Point",
+          "content": "Chi phí tăng khi cần nhiều phụ kiện."
+        }
+      ],
+      "documents": [
+        "doc-vc-logitech-datasheet"
+      ],
+      "relationships": [],
+      "competitors": [],
+      "apiLinks": [],
+      "subtitle": "",
+      "status": "active",
+      "score": "",
+      "website": "",
+      "useCases": []
+    },
+    {
+      "id": "vc-poly-x52",
+      "title": "HP Poly Studio X52 + TC10",
+      "category": "Video Conference",
+      "vendor": "HP Poly",
+      "route": "#vc-poly",
+      "summary": "Video system với DirectorAI, NoiseBlockAI, Acoustic Fence, 4K Ultra HD và TC10 controller.",
+      "tags": [
+        "video-conference",
+        "poly",
+        "studio-x52",
+        "tc10",
+        "directorai"
+      ],
+      "highlights": [
+        "DirectorAI",
+        "NoiseBlockAI",
+        "Acoustic Fence",
+        "TC10 Controller",
+        "Poly Lens"
+      ],
+      "integrations": [
+        {
+          "name": "Meeting Platforms",
+          "items": [
+            "Microsoft Teams Rooms",
+            "Zoom Rooms",
+            "Google Meet"
+          ]
+        }
+      ],
+      "knowledgeSections": [
+        {
+          "title": "Presales Fit",
+          "content": "Phù hợp executive/boardroom cần audio/video chất lượng cao và chống ồn tốt."
+        },
+        {
+          "title": "Weak Point",
+          "content": "Giá cao hơn nhóm phổ thông và cần thiết kế kỹ cho phòng lớn."
+        }
+      ],
+      "documents": [
+        "doc-vc-poly-datasheet"
+      ],
+      "relationships": [],
+      "competitors": [],
+      "apiLinks": [],
+      "subtitle": "",
+      "status": "active",
+      "score": "",
+      "website": "",
+      "useCases": []
+    },
+    {
+      "id": "vc-cisco-webex-devices",
+      "title": "Cisco Webex Devices",
+      "category": "Video Conference",
+      "vendor": "Cisco",
+      "route": "#vc-cisco",
+      "summary": "Hệ sinh thái Webex Devices gồm Desk Pro, Board Pro, Room Kit EQ/Pro, Room Navigator và Control Hub.",
+      "tags": [
+        "video-conference",
+        "cisco",
+        "webex",
+        "room-kit",
+        "control-hub"
+      ],
+      "highlights": [
+        "Webex Native",
+        "Control Hub",
+        "Room Analytics",
+        "Board Pro",
+        "Room Kit"
+      ],
+      "integrations": [
+        {
+          "name": "Meeting Platforms",
+          "items": [
+            "Webex",
+            "Microsoft Teams",
+            "Zoom BYOD"
+          ]
+        }
+      ],
+      "knowledgeSections": [
+        {
+          "title": "Presales Fit",
+          "content": "Phù hợp khách hàng enterprise đã dùng Cisco/Webex hoặc cần end-to-end collaboration."
+        },
+        {
+          "title": "Weak Point",
+          "content": "Phức tạp và chi phí cao hơn với khách chỉ cần Teams/Zoom đơn giản."
+        }
+      ],
+      "documents": [
+        "doc-vc-cisco-datasheet"
+      ],
+      "relationships": [],
+      "competitors": [],
+      "apiLinks": [],
+      "subtitle": "",
+      "status": "active",
+      "score": "",
+      "website": "",
+      "useCases": []
+    },
+    {
+      "id": "vc-jabra-panacast-50",
+      "title": "Jabra PanaCast 50",
+      "category": "Video Conference",
+      "vendor": "Jabra",
+      "route": "#vc-jabra",
+      "summary": "Camera AI panoramic 180° plug-and-play USB với Intelligent Zoom, Virtual Director và Safe Distance Monitoring.",
+      "tags": [
+        "video-conference",
+        "jabra",
+        "panacast",
+        "usb",
+        "byod"
+      ],
+      "highlights": [
+        "180° Panoramic",
+        "USB Plug & Play",
+        "Intelligent Zoom",
+        "Virtual Director",
+        "Safe Distance"
+      ],
+      "integrations": [
+        {
+          "name": "Meeting Platforms",
+          "items": [
+            "Microsoft Teams",
+            "Zoom",
+            "Google Meet",
+            "Webex"
+          ]
+        }
+      ],
+      "knowledgeSections": [
+        {
+          "title": "Presales Fit",
+          "content": "Phù hợp huddle/small room cần camera USB toàn cảnh, triển khai nhanh."
+        },
+        {
+          "title": "Weak Point",
+          "content": "Không phù hợp boardroom lớn hoặc AV enterprise phức tạp."
+        }
+      ],
+      "documents": [
+        "doc-vc-jabra-datasheet"
+      ]
+    },
+    {
+      "id": "vc-crestron-flex",
+      "title": "Crestron Flex",
+      "category": "Video Conference",
+      "vendor": "Crestron",
+      "route": "#vc-crestron",
+      "summary": "UC/AV control enterprise cho Teams Rooms, Zoom Rooms, room scheduling, XiO Cloud và AV/lighting/HVAC integration.",
+      "tags": [
+        "video-conference",
+        "crestron",
+        "flex",
+        "av-control",
+        "teams-rooms",
+        "zoom-rooms"
+      ],
+      "highlights": [
+        "AV Control",
+        "Room Scheduling",
+        "XiO Cloud",
+        "Occupancy Analytics",
+        "Enterprise AV"
+      ],
+      "integrations": [
+        {
+          "name": "Meeting Platforms",
+          "items": [
+            "Microsoft Teams Rooms",
+            "Zoom Rooms"
+          ]
+        }
+      ],
+      "knowledgeSections": [
+        {
+          "title": "Presales Fit",
+          "content": "Phù hợp enterprise cần chuẩn hóa phòng họp, AV control và quản trị tập trung."
+        },
+        {
+          "title": "Weak Point",
+          "content": "Không phải video bar plug-and-play, cần thiết kế/triển khai AV chuyên nghiệp."
+        }
+      ],
+      "documents": [
+        "doc-vc-crestron-datasheet"
+      ],
+      "relationships": [],
+      "competitors": [],
+      "apiLinks": []
+    },
+    {
+      "id": "oncallcx-ucaas",
+      "title": "OnCallCX UCaaS",
+      "category": "OnCallCX",
+      "subCategory": "UCaaS",
+      "parent": "oncallcx",
+      "route": "#oncallcx-ucaas",
+      "summary": "Phân hệ tổng đài PBX cloud/hosted: Extension, User, SIP Trunk, Number Plan, Call Routing, IVR, Ring Group, Voicemail và API-ready integration.",
+      "tags": [
+        "PBX",
+        "Extension",
+        "SIP Trunk",
+        "Call Routing",
+        "API-ready"
+      ],
+      "highlights": [
+        "PBX",
+        "Extension",
+        "SIP Trunk",
+        "Call Routing",
+        "API-ready"
+      ],
+      "knowledgeSections": [
+        {
+          "title": "Scope",
+          "content": "OnCallCX UCaaS chỉ thuần về tổng đài PBX và telephony foundation."
+        },
+        {
+          "title": "Không thuộc UCaaS",
+          "content": "AI Voicebot, Omnichannel, Advanced Analytics, Recording QA/QC, Campaign, CRM workflow"
+        }
+      ],
+      "apiLinks": [
+        {
+          "method": "GET",
+          "path": "/ucaas/extensions",
+          "description": "Danh sách extension"
+        },
+        {
+          "method": "POST",
+          "path": "/ucaas/extensions",
+          "description": "Tạo extension"
+        },
+        {
+          "method": "PATCH",
+          "path": "/ucaas/extensions/{id}",
+          "description": "Cập nhật extension"
+        },
+        {
+          "method": "GET",
+          "path": "/ucaas/cdr",
+          "description": "Truy vấn CDR UCaaS"
+        },
+        {
+          "method": "POST",
+          "path": "/ucaas/click-to-call",
+          "description": "Click-to-call từ hệ thống tích hợp"
+        }
+      ],
+      "type": "product-module",
+      "features": [
+        {
+          "title": "Cloud PBX",
+          "summary": "Tổng đài PBX cloud/hosted, quản lý extension và user tập trung."
+        },
+        {
+          "title": "Extension / User",
+          "summary": "Tạo extension, user, voicemail, quyền gọi và nhóm người dùng."
+        },
+        {
+          "title": "SIP Trunk",
+          "summary": "Kết nối đầu số, SIP trunk, DID, outbound/inbound route và prefix."
+        },
+        {
+          "title": "IVR / Ring Group",
+          "summary": "Cấu hình lời chào, IVR, ring group và call distribution cơ bản."
+        },
+        {
+          "title": "CDR / Call Log",
+          "summary": "Ghi nhận lịch sử cuộc gọi, trạng thái, thời lượng và metadata cơ bản."
+        },
+        {
+          "title": "API-ready",
+          "summary": "API chờ tích hợp cho provisioning, CDR, click-to-call hoặc CRM extension."
+        }
+      ],
+      "documents": [
+        "datasheet-oncallcx-ucaas",
+        "ucaas-api-spec",
+        "ucaas-deployment-checklist"
+      ],
+      "demo": [
+        "ucaas-extension-provisioning",
+        "ucaas-call-routing-demo"
+      ],
+      "suitable": [
+        "SME",
+        "Enterprise",
+        "Multi-branch",
+        "PBX Replacement"
+      ],
+      "presentationId": "presentation-oncallcx-ucaas",
+      "relationships": [],
+      "integrations": [],
+      "competitors": [],
+      "subtitle": "",
+      "vendor": "",
+      "status": "active",
+      "score": "",
+      "website": "",
+      "useCases": []
+    },
+    {
+      "id": "oncallcx-ccaas",
+      "title": "OnCallCX CCaaS",
+      "category": "OnCallCX",
+      "subCategory": "CCaaS",
+      "parent": "oncallcx",
+      "type": "product-module",
+      "route": "#oncallcx-ccaas",
+      "summary": "Phân hệ Contact Center: AI Voicebot, Omnichannel, Analytics/Dashboard, Recording, Campaign/Outbound và CRM/ERP Integration.",
+      "tags": [
+        "AI Voicebot",
+        "Omnichannel",
+        "Analytics",
+        "Recording",
+        "CRM/ERP Integration"
+      ],
+      "highlights": [
+        "AI Voicebot",
+        "Omnichannel",
+        "Analytics",
+        "Recording",
+        "CRM/ERP Integration"
+      ],
+      "features": [
+        {
+          "title": "AI Voicebot",
+          "summary": "Tự động hóa cuộc gọi, kịch bản thoại, chuyển agent và ghi nhận kết quả."
+        },
+        {
+          "title": "Omnichannel",
+          "summary": "Voice, Chat, Email, Social và digital channels trong cùng hàng đợi."
+        },
+        {
+          "title": "Analytics / Dashboard",
+          "summary": "Realtime dashboard, agent performance, queue, SLA và campaign report."
+        },
+        {
+          "title": "Recording",
+          "summary": "Ghi âm, tra soát, QA/QC và báo cáo lịch sử cuộc gọi."
+        },
+        {
+          "title": "Campaign / Outbound",
+          "summary": "Telesales, gọi ra tự động, campaign list và tracking kết quả."
+        },
+        {
+          "title": "CRM/ERP Integration",
+          "summary": "Screen pop, ticket, customer sync, call log và workflow CSKH."
+        }
+      ],
+      "apiLinks": [
+        {
+          "method": "POST",
+          "path": "/ccaas/call/outbound",
+          "description": "Khởi tạo outbound call"
+        },
+        {
+          "method": "POST",
+          "path": "/ccaas/webhook/incoming",
+          "description": "Nhận event cuộc gọi realtime"
+        },
+        {
+          "method": "POST",
+          "path": "/ccaas/campaign",
+          "description": "Tạo/cập nhật campaign"
+        },
+        {
+          "method": "GET",
+          "path": "/ccaas/queue/status",
+          "description": "Trạng thái queue/agent"
+        },
+        {
+          "method": "GET",
+          "path": "/ccaas/recording/{id}",
+          "description": "Truy xuất ghi âm"
+        }
+      ],
+      "documents": [
+        "datasheet-oncallcx-ccaas",
+        "ccaas-api-spec",
+        "ccaas-crm-integration-guide"
+      ],
+      "demo": [
+        "ccaas-inbound-screenpop",
+        "ccaas-outbound-campaign",
+        "ccaas-dashboard-demo"
+      ],
+      "knowledgeSections": [
+        {
+          "title": "Scope",
+          "content": "OnCallCX CCaaS là lớp vận hành chăm sóc khách hàng và contact center."
+        },
+        {
+          "title": "Thành phần thuộc CCaaS",
+          "content": "AI Voicebot, Omnichannel, Analytics/Dashboard, Recording, Campaign, CRM/ERP Integration"
+        }
+      ],
+      "suitable": [
+        "Enterprise",
+        "Banking",
+        "Finance",
+        "Retail",
+        "CSKH"
+      ]
     }
   ],
   "assets": [],
@@ -526,91 +1731,221 @@
   ],
   "articles": [
     {
-      "id": "article-crm-erp-vietnam",
-      "title": "CRM/ERP Việt Nam",
-      "sidebarId": "crm-erp-vietnam",
-      "route": "#crm-erp-vietnam",
-      "type": "category-article",
+      "id": "article-overview",
+      "title": "Tổng quan",
+      "sidebarId": "overview",
+      "route": "#overview",
+      "type": "static-page",
       "status": "active",
-      "summary": "Danh mục các hệ thống CRM/ERP Việt Nam có thể tích hợp với Contact Center, phục vụ screen pop, đồng bộ khách hàng, ticket, lịch sử cuộc gọi và workflow chăm sóc khách hàng.",
+      "module": "Tổng quan",
+      "summary": "Trang tổng quan giúp khách hàng đọc nhanh hệ sinh thái giải pháp FTI, xem demo luồng nghiệp vụ, so sánh nền tảng và nắm checklist triển khai tại Việt Nam.",
+      "tags": [
+        "overview",
+        "portal",
+        "dashboard"
+      ],
       "cards": [
         {
-          "title": "MISA AMIS CRM",
-          "summary": "CRM/ERP phổ biến tại Việt Nam, phù hợp khách hàng SME và doanh nghiệp đang dùng hệ sinh thái MISA.",
-          "url": "https://amis.misa.vn/"
+          "title": "Contact Center",
+          "summary": "OnCallCX, CCaaS Việt Nam, CCaaS Global, API Reference và UC/PBX.",
+          "url": "#oncallcx"
         },
         {
-          "title": "Getfly CRM",
-          "summary": "CRM Việt Nam hỗ trợ quản lý khách hàng, marketing automation và bán hàng.",
-          "url": "https://getfly.vn/"
+          "title": "Video Conference",
+          "summary": "Catalog thiết bị hội nghị theo thương hiệu và loại phòng họp.",
+          "url": "#video-conferencing"
         },
         {
-          "title": "CloudGO",
-          "summary": "Nền tảng CRM Việt Nam có thể tích hợp quy trình bán hàng và chăm sóc khách hàng.",
-          "url": "https://cloudgo.vn/"
+          "title": "Demo & Sales",
+          "summary": "Demo sản phẩm, bảng so sánh và nguồn tài liệu bán hàng.",
+          "url": "#demo"
         },
         {
-          "title": "Base.vn",
-          "summary": "Nền tảng quản trị doanh nghiệp có thể liên quan workflow, ticket và vận hành nội bộ.",
-          "url": "https://base.vn/"
+          "title": "CRM/ERP Việt Nam",
+          "summary": "Định hướng tích hợp Getfly CRM, MISA AMIS CRM, CloudGO CRM, Base.vn, FastWork CRM, BRAVO ERP với contact center và hệ sinh thái CSKH.",
+          "url": "#crm"
         }
       ]
     },
     {
-      "id": "article-uc-pbx-vietnam",
-      "title": "UC / PBX — Nhà Cung Cấp Việt Nam",
-      "sidebarId": "uc-pbx-vietnam",
-      "route": "#uc-pbx-vietnam",
+      "id": "article-oncallcx",
+      "title": "OnCallCX",
+      "sidebarId": "oncallcx",
+      "route": "#oncallcx",
       "type": "category-article",
       "status": "active",
-      "summary": "Danh mục hệ thống UC/PBX/SIP có thể tích hợp với OnCallCX qua SIP trunk, SBC, API hoặc mô hình BYOC.",
+      "module": "CONTACT CENTER",
+      "summary": "Trang sản phẩm OnCallCX hiển thị hai bài viết độc lập: OnCallCX CCaaS và OnCallCX UCaaS. Mỗi bài có Product Center, Presentation và tài liệu riêng.",
+      "tags": [
+        "oncallcx",
+        "product-portal",
+        "ucaas",
+        "ccaas",
+        "customer-experience",
+        "fpt"
+      ],
+      "productRefs": [
+        "oncallcx"
+      ],
       "cards": [
         {
-          "title": "Cisco CUCM",
-          "summary": "Hệ thống IP Telephony enterprise, phù hợp tích hợp SIP trunk, CUBE/SBC và contact center.",
-          "url": ""
+          "title": "OnCallCX CCaaS",
+          "summary": "OnCallCX là nền tảng Contact Center as a Service (CCaaS) do FPT Telecom phát triển, giúp doanh nghiệp triển khai tổng đài chăm sóc khách hàng trên nền tảng Cloud với thời gian triển khai nhanh, khả năng mở rộng linh hoạt và tích hợp dễ dàng với CRM, ERP, AI Bot và các hệ thống nghiệp vụ.",
+          "url": "#oncallcx-product-center-ccaas"
         },
         {
-          "title": "Asterisk",
-          "summary": "PBX mã nguồn mở, phù hợp lab, SBC proxy, SIP integration và custom dialplan.",
-          "url": "https://www.asterisk.org/"
+          "title": "OnCallCX UCaaS",
+          "summary": "OnCallCX UCaaS tập trung vào tổng đài Cloud PBX, extension, SIP trunk, call routing và tích hợp CRM/API cho doanh nghiệp.",
+          "url": "#oncallcx-product-center-ucaas"
         },
         {
-          "title": "3CX",
-          "summary": "PBX/UC software hỗ trợ SIP trunk, softphone, web client và call flow.",
-          "url": "https://www.3cx.com/"
+          "title": "API Reference",
+          "summary": "API/Webhook, CDR, Recording và tích hợp CRM/ERP.",
+          "url": "#api-reference"
+        }
+      ],
+      "family": "oncallcx"
+    },
+    {
+      "id": "article-oncallx-ccaas",
+      "title": "OnCallCX CCaaS",
+      "sidebarId": "oncallcx-ccaas",
+      "route": "#oncallcx-product-center-ccaas",
+      "type": "product-article",
+      "status": "active",
+      "module": "CONTACT CENTER",
+      "summary": "OnCallCX là nền tảng Contact Center as a Service (CCaaS) do FPT Telecom phát triển, giúp doanh nghiệp triển khai tổng đài chăm sóc khách hàng trên nền tảng Cloud với thời gian triển khai nhanh, khả năng mở rộng linh hoạt và tích hợp dễ dàng với CRM, ERP, AI Bot và các hệ thống nghiệp vụ.",
+      "cards": [
+        {
+          "title": "Omnichannel Contact Center",
+          "summary": "Vận hành Voice, Chat, Email, Social và digital channels trong cùng một hàng đợi.",
+          "url": "#oncallcx-product-center-ccaas"
         },
         {
-          "title": "Ribbon SBC",
-          "summary": "Session Border Controller cho SIP interconnect, bảo mật và routing voice.",
-          "url": "https://ribboncommunications.com/"
+          "title": "Voice / Chat / Email / Social",
+          "summary": "Hợp nhất tương tác khách hàng đa kênh trong một luồng vận hành.",
+          "url": "#oncallcx-product-center-ccaas"
+        },
+        {
+          "title": "AI Voicebot & Chatbot",
+          "summary": "Tự động hóa cuộc gọi, hội thoại, phân tuyến và ghi nhận kết quả.",
+          "url": "#oncallcx-product-center-ccaas"
+        },
+        {
+          "title": "Call Recording",
+          "summary": "Ghi âm, tra soát, QA/QC và báo cáo lịch sử cuộc gọi.",
+          "url": "#oncallcx-product-center-ccaas"
+        },
+        {
+          "title": "Dashboard & Realtime Report",
+          "summary": "Theo dõi realtime queue, SLA, agent performance và campaign report.",
+          "url": "#oncallcx-product-center-ccaas"
+        },
+        {
+          "title": "CRM / ERP Integration",
+          "summary": "Screen pop, ticket, customer sync, call log và workflow CSKH.",
+          "url": "#oncallcx-product-center-ccaas"
+        },
+        {
+          "title": "Workflow Automation",
+          "summary": "Tự động hóa quy trình chăm sóc khách hàng và phối hợp nghiệp vụ.",
+          "url": "#oncallcx-product-center-ccaas"
+        },
+        {
+          "title": "Open REST API & Webhook",
+          "summary": "Kết nối hệ thống ngoài bằng REST API và webhook realtime.",
+          "url": "#oncallcx-product-center-ccaas"
+        }
+      ]
+    },
+    {
+      "id": "article-oncallx-ucaas",
+      "title": "OnCallCX UCaaS",
+      "sidebarId": "oncallcx-ucaas",
+      "route": "#oncallcx-product-center-ucaas",
+      "type": "category-article",
+      "status": "active",
+      "module": "CONTACT CENTER",
+      "summary": "OnCallCX UCaaS là bài viết mở rộng từ OnCallCX, tập trung vào tổng đài Cloud PBX, extension, SIP trunk, call routing và khả năng tích hợp CRM/API cho doanh nghiệp.",
+      "cards": [
+        {
+          "title": "Cloud PBX",
+          "summary": "Tổng đài PBX cloud/hosted, quản lý extension và user tập trung.",
+          "url": "#oncallcx-product-center-ucaas"
+        },
+        {
+          "title": "Extension / User",
+          "summary": "Tạo extension, user, voicemail, quyền gọi và nhóm người dùng.",
+          "url": "#oncallcx-product-center-ucaas"
+        },
+        {
+          "title": "SIP Trunk",
+          "summary": "Kết nối đầu số, SIP trunk, DID, outbound/inbound route và prefix.",
+          "url": "#oncallcx-product-center-ucaas"
+        },
+        {
+          "title": "Call Routing / IVR",
+          "summary": "Cấu hình lời chào, IVR, ring group và call distribution cơ bản.",
+          "url": "#oncallcx-product-center-ucaas"
+        },
+        {
+          "title": "CDR / Call Log",
+          "summary": "Ghi nhận lịch sử cuộc gọi, trạng thái, thời lượng và metadata cơ bản.",
+          "url": "#oncallcx-product-center-ucaas"
+        },
+        {
+          "title": "API-ready Integration",
+          "summary": "API chờ tích hợp provisioning, CDR, click-to-call hoặc CRM extension.",
+          "url": "#oncallcx-product-center-ucaas"
         }
       ]
     },
     {
       "id": "article-ccaas-vietnam",
-      "title": "CCaaS — Đối Tác Việt Nam",
-      "sidebarId": "ccaas-vietnam",
-      "route": "#ccaas-vietnam",
+      "title": "CCaaS Việt Nam",
+      "sidebarId": "ccaas-vn",
+      "route": "#ccaas-vn",
       "type": "category-article",
       "status": "active",
-      "summary": "Danh mục giải pháp Contact Center tại Việt Nam, trong đó OnCallCX là sản phẩm trọng tâm của FPT Telecom.",
+      "summary": "Bài viết nhóm các nhà cung cấp CCaaS nội địa, phù hợp khách hàng cần hỗ trợ tiếng Việt, SIP trunk trong nước, dữ liệu tại Việt Nam và tích hợp CRM nội địa.",
       "cards": [
         {
-          "title": "OnCallCX",
-          "summary": "Contact Center as a Service made by FPT, hỗ trợ Omnichannel, Recording, Dashboard, API và tích hợp AI.",
-          "url": "#product-detail:oncallcx"
+          "title": "OnCallCX Full CC",
+          "summary": "Contact Center made by FPT, hỗ trợ CRM integration, ticket, campaign, dashboard và API.",
+          "url": "#oncallcx-product-center-ccaas"
+        },
+        {
+          "title": "VNPT Contact Center",
+          "summary": "Giải pháp tổng đài hosted từ VNPT, phù hợp khách hàng cần tích hợp SIP trunk và đầu số.",
+          "url": "#ccaas-vn"
+        },
+        {
+          "title": "Mitek Contact Center",
+          "summary": "Giải pháp Contact Center cho enterprise, tài chính, ngân hàng và bảo hiểm.",
+          "url": "#ccaas-vn"
+        },
+        {
+          "title": "CCaaS Presales Playbook",
+          "summary": "Checklist tư vấn CCaaS Việt Nam.",
+          "url": "#document-center"
         }
+      ],
+      "module": "CONTACT CENTER",
+      "tags": [
+        "ccaas",
+        "vietnam",
+        "partner",
+        "contact-center"
       ]
     },
     {
       "id": "article-ccaas-international",
-      "title": "CCaaS — Nền Tảng Quốc Tế",
-      "sidebarId": "ccaas-international",
-      "route": "#ccaas-international",
+      "title": "CCaaS Global",
+      "sidebarId": "ccaas-global",
+      "route": "#ccaas-global",
       "type": "category-article",
       "status": "active",
-      "summary": "Danh mục nền tảng CCaaS quốc tế dùng để tham khảo, so sánh và tư vấn khách hàng enterprise/global.",
+      "summary": "Bài viết nhóm các nền tảng CCaaS quốc tế để tham khảo, so sánh và tư vấn khách hàng enterprise/global.",
       "cards": [
         {
           "title": "Webex Contact Center",
@@ -632,7 +1967,8 @@
           "summary": "CCaaS enterprise mạnh về AI, WFM và analytics.",
           "url": "https://www.nice.com/"
         }
-      ]
+      ],
+      "module": "CONTACT CENTER"
     },
     {
       "id": "article-api-reference",
@@ -641,61 +1977,1634 @@
       "route": "#api-reference",
       "type": "api-reference",
       "status": "active",
-      "summary": "API Reference được chuẩn hóa theo từng product trong Knowledge Graph và asset API Spec.",
+      "summary": "Thư mục chứa các bài viết API, webhook, CDR, recording và integration spec đã được gom về một nơi.",
       "cards": [
+        {
+          "title": "API Center",
+          "summary": "Structured API Reference với search, filter, request/response và copy endpoint.",
+          "url": "#api-center"
+        },
         {
           "title": "CDR API",
           "summary": "Truy vấn lịch sử cuộc gọi, trạng thái, thời lượng và metadata.",
-          "url": "#product-detail:oncallcx"
+          "url": "#api-center"
         },
         {
           "title": "Webhook Incoming",
           "summary": "Nhận sự kiện cuộc gọi realtime để tích hợp CRM/ERP.",
-          "url": "#product-detail:oncallcx"
+          "url": "#api-center"
         },
         {
           "title": "Recording API",
-          "summary": "Truy xuất thông tin ghi âm phục vụ QA/QC và tra soát.",
-          "url": "#product-detail:oncallcx"
+          "summary": "Truy xuất ghi âm phục vụ QA/QC và tra soát.",
+          "url": "#api-center"
         }
+      ],
+      "module": "CONTACT CENTER",
+      "tags": [
+        "api",
+        "reference",
+        "webhook",
+        "integration"
       ]
     },
     {
-      "id": "article-video",
-      "title": "Video Demo",
-      "sidebarId": "video",
-      "route": "#video",
-      "type": "asset-library",
+      "id": "article-uc-pbx-vietnam",
+      "title": "UC/PBX Việt Nam",
+      "sidebarId": "ucpbx-vn",
+      "route": "#ucpbx-vn",
+      "type": "category-article",
       "status": "active",
-      "summary": "Video demo nên được quản lý như asset type Demo Video và gắn theo sản phẩm trong Asset Manager.",
+      "summary": "Nhóm nhà cung cấp UC/PBX/SIP có thể tích hợp với Contact Center qua SIP trunk, SBC, API, CTI hoặc BYOC.",
+      "cards": [
+        {
+          "title": "Cisco CUCM",
+          "summary": "Hệ thống IP Telephony enterprise, phù hợp tích hợp SIP trunk, CUBE/SBC và contact center.",
+          "url": ""
+        },
+        {
+          "title": "Asterisk",
+          "summary": "PBX mã nguồn mở, phù hợp lab, SBC proxy, SIP integration và custom dialplan.",
+          "url": "https://www.asterisk.org/"
+        },
+        {
+          "title": "3CX",
+          "summary": "PBX/UC software hỗ trợ SIP trunk, softphone, web client và call flow.",
+          "url": "https://www.3cx.com/"
+        },
+        {
+          "title": "Ribbon SBC",
+          "summary": "Session Border Controller cho SIP interconnect, bảo mật và routing voice.",
+          "url": "https://ribboncommunications.com/"
+        }
+      ],
+      "module": "CONTACT CENTER"
+    },
+    {
+      "id": "article-video",
+      "title": "Tổng quan Video Conference",
+      "sidebarId": "video-conferencing",
+      "route": "#video-conferencing",
+      "type": "category-article",
+      "status": "active",
+      "summary": "Tổng quan danh mục giải pháp Video Conference theo brand catalog, product detail, room recommendation, feature comparison và presales battle card.",
       "cards": [
         {
           "title": "OnCallCX Demo Flow",
           "summary": "Login portal, tạo extension, assign phone, register extension và thực hiện cuộc gọi.",
-          "url": "#product-detail:oncallcx"
+          "url": "#oncallcx-product-center-ccaas"
+        }
+      ],
+      "module": "VIDEO CONFERENCE"
+    },
+    {
+      "id": "article-vc-yealink",
+      "title": "Yealink Meeting Bar",
+      "sidebarId": "vc-yealink",
+      "route": "#vc-yealink",
+      "type": "product-article",
+      "status": "active",
+      "module": "GLOBAL BRANDS",
+      "summary": "Yealink MeetingBar A40, all-in-one Android video bar, AI camera và Teams/Zoom/Meet certified.",
+      "tags": [
+        "yealink",
+        "meetingbar",
+        "a40",
+        "teams",
+        "zoom",
+        "google-meet"
+      ],
+      "productRefs": [
+        "vc-yealink-a40"
+      ],
+      "cards": [
+        {
+          "title": "AI Features",
+          "summary": "IntelliFocus, Auto-Framing, Speaker Tracking và People Counting.",
+          "url": "#vc-yealink"
+        },
+        {
+          "title": "Room Bundle",
+          "summary": "A40 + CTP25 + WPP30 + wireless mic cho Huddle/Small/Medium room.",
+          "url": "#vc-yealink"
+        },
+        {
+          "title": "Documents",
+          "summary": "Datasheet, quick start, manual và presales checklist.",
+          "url": "#document-center"
+        },
+        {
+          "title": "Official Website",
+          "summary": "Trang sản phẩm chính thức Yealink.",
+          "url": "https://www.yealink.com/"
         }
       ]
     },
     {
+      "id": "article-vc-logitech",
+      "title": "Logitech Rally Bar",
+      "sidebarId": "vc-logitech",
+      "route": "#vc-logitech",
+      "type": "product-article",
+      "status": "active",
+      "module": "GLOBAL BRANDS",
+      "summary": "Logitech Rally Bar với CollabOS, RightSight AI, Tap, Scribe, Mic Pods và Logitech Sync.",
+      "tags": [
+        "logitech",
+        "rally-bar",
+        "collabos",
+        "scribe",
+        "tap",
+        "swytch"
+      ],
+      "productRefs": [
+        "vc-logitech-rally-bar"
+      ],
+      "cards": [
+        {
+          "title": "Ecosystem",
+          "summary": "Rally Bar, Tap, Tap Scheduler, Scribe, Mic Pods, SWYTCH và Sync.",
+          "url": "#vc-logitech"
+        },
+        {
+          "title": "BYOD",
+          "summary": "SWYTCH adapter hỗ trợ kết nối laptop cá nhân.",
+          "url": "#vc-logitech"
+        },
+        {
+          "title": "Room Bundle",
+          "summary": "Small/Medium/Large room bundle với Tap và Mic Pods.",
+          "url": "#vc-logitech"
+        },
+        {
+          "title": "Official Website",
+          "summary": "Trang sản phẩm chính thức Logitech.",
+          "url": "https://www.logitech.com/"
+        }
+      ]
+    },
+    {
+      "id": "article-vc-poly",
+      "title": "HP Poly Studio X52",
+      "sidebarId": "vc-poly",
+      "route": "#vc-poly",
+      "type": "product-article",
+      "status": "active",
+      "module": "GLOBAL BRANDS",
+      "summary": "HP Poly Studio X52 + TC10 hỗ trợ DirectorAI, NoiseBlockAI, Acoustic Fence và quản trị Poly Lens.",
+      "tags": [
+        "poly",
+        "hp-poly",
+        "studio-x52",
+        "tc10",
+        "directorai",
+        "noiseblockai"
+      ],
+      "productRefs": [
+        "vc-poly-x52"
+      ],
+      "cards": [
+        {
+          "title": "DirectorAI",
+          "summary": "Camera AI tự động định vị người đang phát biểu và tối ưu khung hình.",
+          "url": "#vc-poly"
+        },
+        {
+          "title": "NoiseBlockAI",
+          "summary": "Lọc tiếng ồn và tạo vùng thu âm bằng Acoustic Fence.",
+          "url": "#vc-poly"
+        },
+        {
+          "title": "TC10 Controller",
+          "summary": "Touch controller 10.1 inch cho điều khiển và scheduling.",
+          "url": "#vc-poly"
+        },
+        {
+          "title": "Official Website",
+          "summary": "Trang sản phẩm chính thức HP Poly.",
+          "url": "https://www.hp.com/us-en/poly.html"
+        }
+      ]
+    },
+    {
+      "id": "article-vc-cisco",
+      "title": "Cisco Webex Devices",
+      "sidebarId": "vc-cisco",
+      "route": "#vc-cisco",
+      "type": "product-article",
+      "status": "active",
+      "module": "GLOBAL BRANDS",
+      "summary": "Cisco Webex Devices gồm Desk Pro, Board Pro, Room Kit, Room Navigator và Control Hub.",
+      "tags": [
+        "cisco",
+        "webex",
+        "room-kit",
+        "board-pro",
+        "desk-pro",
+        "control-hub"
+      ],
+      "productRefs": [
+        "vc-cisco-webex-devices"
+      ],
+      "cards": [
+        {
+          "title": "Webex Native",
+          "summary": "Thiết bị native trong hệ sinh thái Cisco Webex.",
+          "url": "#vc-cisco"
+        },
+        {
+          "title": "Room Kit",
+          "summary": "Room Kit EQ/Pro cho medium/large room và boardroom.",
+          "url": "#vc-cisco"
+        },
+        {
+          "title": "Control Hub",
+          "summary": "Quản trị, analytics và lifecycle thiết bị Webex.",
+          "url": "#vc-cisco"
+        },
+        {
+          "title": "Official Website",
+          "summary": "Trang sản phẩm chính thức Webex Devices.",
+          "url": "https://www.webex.com/devices.html"
+        }
+      ]
+    },
+    {
+      "id": "article-vc-jabra",
+      "title": "Jabra PanaCast",
+      "sidebarId": "vc-jabra",
+      "route": "#vc-jabra",
+      "type": "product-article",
+      "status": "active",
+      "module": "GLOBAL BRANDS",
+      "summary": "Jabra PanaCast 50 là camera AI panoramic 180°, plug-and-play USB cho huddle/small room.",
+      "tags": [
+        "jabra",
+        "panacast",
+        "180-degree",
+        "usb",
+        "byod"
+      ],
+      "productRefs": [
+        "vc-jabra-panacast-50"
+      ],
+      "cards": [
+        {
+          "title": "180° Panoramic AI",
+          "summary": "Toàn cảnh không góc chết cho huddle room.",
+          "url": "#vc-jabra"
+        },
+        {
+          "title": "Plug & Play",
+          "summary": "USB-C BYOD, triển khai nhanh với laptop cá nhân.",
+          "url": "#vc-jabra"
+        },
+        {
+          "title": "Virtual Director",
+          "summary": "Tự động tập trung người nói/nhóm đang tương tác.",
+          "url": "#vc-jabra"
+        },
+        {
+          "title": "Official Website",
+          "summary": "Trang sản phẩm chính thức Jabra.",
+          "url": "https://www.jabra.com/business/video-conferencing"
+        }
+      ]
+    },
+    {
+      "id": "article-vc-crestron",
+      "title": "Crestron Flex",
+      "sidebarId": "vc-crestron",
+      "route": "#vc-crestron",
+      "type": "product-article",
+      "status": "active",
+      "module": "GLOBAL BRANDS",
+      "summary": "Crestron Flex là hệ thống UC/AV control enterprise cho Teams Rooms, Zoom Rooms và quản trị XiO Cloud.",
+      "tags": [
+        "crestron",
+        "flex",
+        "av-control",
+        "teams-rooms",
+        "zoom-rooms",
+        "xio-cloud"
+      ],
+      "productRefs": [
+        "vc-crestron-flex"
+      ],
+      "cards": [
+        {
+          "title": "AV Control",
+          "summary": "Điều khiển AV, lighting, shading và HVAC từ một hệ thống.",
+          "url": "#vc-crestron"
+        },
+        {
+          "title": "Room Scheduling",
+          "summary": "Scheduling panel và occupancy analytics.",
+          "url": "#vc-crestron"
+        },
+        {
+          "title": "XiO Cloud",
+          "summary": "Quản trị tập trung thiết bị Crestron enterprise.",
+          "url": "#vc-crestron"
+        },
+        {
+          "title": "Official Website",
+          "summary": "Trang sản phẩm chính thức Crestron Flex.",
+          "url": "https://www.crestron.com/Products/Workspace-Solutions/Unified-Communications"
+        }
+      ]
+    },
+    {
+      "id": "article-vc-huddle-room",
+      "title": "Huddle Room",
+      "sidebarId": "vc-huddle-room",
+      "route": "#vc-huddle-room",
+      "type": "category-article",
+      "status": "active",
+      "module": "THEO LOẠI PHÒNG",
+      "summary": "Room recommendation cho Huddle Room 2-4 người, ưu tiên thiết bị all-in-one, USB/BYOD và triển khai nhanh.",
+      "tags": [
+        "huddle-room",
+        "room-design",
+        "video-conference"
+      ],
+      "cards": [
+        {
+          "title": "Yealink A40",
+          "summary": "All-in-one Android video bar cho Huddle/Small room.",
+          "url": "#vc-yealink"
+        },
+        {
+          "title": "Logitech Rally Bar Huddle",
+          "summary": "BYOD và CollabOS cho phòng nhỏ.",
+          "url": "#vc-logitech"
+        },
+        {
+          "title": "Jabra PanaCast 50",
+          "summary": "USB panoramic 180° plug-and-play.",
+          "url": "#vc-jabra"
+        },
+        {
+          "title": "Room Design",
+          "summary": "1 display 55”, video bar dưới màn hình, không cần mic mở rộng.",
+          "url": "#vc-huddle-room"
+        }
+      ]
+    },
+    {
+      "id": "article-vc-medium-large-room",
+      "title": "Medium / Large Room",
+      "sidebarId": "vc-medium-large-room",
+      "route": "#vc-medium-large-room",
+      "type": "category-article",
+      "status": "active",
+      "module": "THEO LOẠI PHÒNG",
+      "summary": "Room recommendation cho Medium/Large room, ưu tiên dual display, mic mở rộng, DSP/AV control, scheduling và quản trị tập trung.",
+      "tags": [
+        "medium-room",
+        "large-room",
+        "boardroom",
+        "av-design"
+      ],
+      "cards": [
+        {
+          "title": "Logitech Rally Bar + Mic Pods",
+          "summary": "Medium room với Tap, Scribe, Mic Pods và Sync.",
+          "url": "#vc-logitech"
+        },
+        {
+          "title": "Poly X52 + TC10",
+          "summary": "DirectorAI, NoiseBlockAI và mic extension.",
+          "url": "#vc-poly"
+        },
+        {
+          "title": "Cisco Room Kit Pro",
+          "summary": "Enterprise Webex/Cisco room system.",
+          "url": "#vc-cisco"
+        },
+        {
+          "title": "Crestron Flex",
+          "summary": "Boardroom/AV control, XiO Cloud và scheduling.",
+          "url": "#vc-crestron"
+        }
+      ]
+    },
+    {
+      "id": "article-integration-playbook",
+      "title": "Integration Playbook",
+      "sidebarId": "integration",
+      "route": "#integration",
+      "type": "knowledge-base",
+      "status": "active",
+      "module": "INTEGRATION",
+      "summary": "Playbook tích hợp Contact Center với CRM/ERP, SIP trunk, SBC, API/Webhook và các hệ thống nghiệp vụ nội bộ.",
+      "tags": [
+        "integration",
+        "crm",
+        "erp",
+        "sip",
+        "webhook"
+      ],
+      "cards": [
+        {
+          "title": "CRM Screen Pop",
+          "summary": "Bật màn hình thông tin khách hàng khi có cuộc gọi vào.",
+          "url": "#crm"
+        },
+        {
+          "title": "ERP Customer Sync",
+          "summary": "Đồng bộ hồ sơ khách hàng, ticket, đơn hàng hoặc mã khách hàng.",
+          "url": "#integration"
+        },
+        {
+          "title": "Webhook Events",
+          "summary": "Nhận sự kiện realtime để kích hoạt workflow.",
+          "url": "#api-center"
+        },
+        {
+          "title": "SIP / SBC Integration",
+          "summary": "Kết nối SIP trunk, SBC, PBX hoặc BYOC.",
+          "url": "#ucpbx-vn"
+        }
+      ]
+    },
+    {
+      "id": "article-crm-erp-vietnam",
+      "title": "CRM/ERP Việt Nam",
+      "sidebarId": "crm",
+      "route": "#crm",
+      "type": "category-article",
+      "status": "active",
+      "summary": "Danh mục CRM/ERP Việt Nam có thể tích hợp Contact Center, phục vụ screen pop, đồng bộ khách hàng, ticket, lịch sử cuộc gọi và workflow CSKH.",
+      "cards": [
+        {
+          "title": "Getfly CRM",
+          "summary": "CRM Việt Nam phù hợp SME, hỗ trợ bán hàng, marketing automation và chăm sóc khách hàng.",
+          "url": "https://getfly.vn/"
+        },
+        {
+          "title": "MISA AMIS CRM",
+          "summary": "Nền tảng CRM trong hệ sinh thái MISA AMIS.",
+          "url": "https://amis.misa.vn/"
+        },
+        {
+          "title": "CloudGO CRM",
+          "summary": "CRM cloud thuần Việt, mạnh về quản lý bán hàng và chăm sóc khách hàng.",
+          "url": "https://cloudgo.vn/"
+        },
+        {
+          "title": "Base.vn",
+          "summary": "Nền tảng quản trị doanh nghiệp liên quan workflow, ticket, approval và vận hành nội bộ.",
+          "url": "https://base.vn/"
+        }
+      ],
+      "module": "INTEGRATION",
+      "tags": [
+        "crm",
+        "erp",
+        "vietnam",
+        "integration"
+      ]
+    },
+    {
       "id": "article-compliance",
-      "title": "Tuân thủ",
+      "title": "Tuân thủ VN",
       "sidebarId": "compliance",
       "route": "#compliance",
       "type": "knowledge-base",
       "status": "active",
-      "summary": "Khu vực quản lý thông tin tuân thủ, bảo mật, lưu trữ dữ liệu, ghi âm và chính sách tích hợp theo từng sản phẩm.",
+      "summary": "Khu vực quản lý thông tin tuân thủ, bảo mật, lưu trữ dữ liệu, ghi âm, dữ liệu cá nhân, audit và chính sách tích hợp.",
       "cards": [
         {
-          "title": "Data Storage",
-          "summary": "Chính sách lưu trữ dữ liệu, recording và thời gian giữ dữ liệu theo yêu cầu khách hàng.",
-          "url": "#product-detail:oncallcx"
+          "title": "Data Protection",
+          "summary": "Kiểm soát dữ liệu cá nhân, mục đích xử lý, lưu trữ và quyền truy cập.",
+          "url": "#compliance"
         },
         {
-          "title": "Security",
-          "summary": "Vai trò truy cập, phân quyền, audit và các yêu cầu bảo mật.",
-          "url": "#product-detail:oncallcx"
+          "title": "Recording Policy",
+          "summary": "Thông báo ghi âm, lưu trữ an toàn và khả năng tra soát.",
+          "url": "#compliance"
+        },
+        {
+          "title": "API Security",
+          "summary": "Token, signature, rate limit, audit log và quyền truy cập API.",
+          "url": "#api-center"
+        },
+        {
+          "title": "Compliance Checklist",
+          "summary": "Checklist tuân thủ cho dự án Contact Center.",
+          "url": "#document-center"
+        }
+      ],
+      "module": "INTEGRATION",
+      "tags": [
+        "compliance",
+        "security",
+        "recording",
+        "data-protection"
+      ]
+    },
+    {
+      "id": "article-demo",
+      "title": "Demo sản phẩm",
+      "sidebarId": "demo",
+      "route": "#demo",
+      "type": "static-page",
+      "status": "active",
+      "module": "DEMO & SALES",
+      "summary": "Khu vực demo sản phẩm dùng cho khách hàng đọc hiểu và presales trình bày luồng nghiệp vụ.",
+      "cards": []
+    },
+    {
+      "id": "article-compare",
+      "title": "Bảng so sánh",
+      "sidebarId": "compare",
+      "route": "#compare",
+      "type": "static-page",
+      "status": "active",
+      "module": "DEMO & SALES",
+      "summary": "Bảng so sánh nhanh các nhóm giải pháp, tính năng và điểm phù hợp.",
+      "cards": []
+    },
+    {
+      "id": "article-resources",
+      "title": "Nguồn tài liệu",
+      "sidebarId": "resources",
+      "route": "#resources",
+      "type": "asset-library",
+      "status": "active",
+      "module": "DEMO & SALES",
+      "summary": "Nguồn tài liệu dùng cho presales, demo, checklist và handover.",
+      "cards": []
+    },
+    {
+      "id": "article-ai-assistant",
+      "title": "AI Assistant",
+      "sidebarId": "ai-assistant",
+      "route": "#ai-assistant",
+      "type": "cms-module",
+      "status": "active",
+      "module": "Enterprise CMS",
+      "summary": "AI Assistant hiện tại là local rule-based assistant đọc CMS data để trả lời nhanh về product, API, document, article và compliance.",
+      "tags": [
+        "ai",
+        "assistant",
+        "cms",
+        "presales"
+      ],
+      "cards": [
+        {
+          "title": "CMS Powered",
+          "summary": "Đọc products, apiLinks, articles và knowledge sections từ CMS.",
+          "url": "#ai-assistant"
+        },
+        {
+          "title": "Question Suggestions",
+          "summary": "Gợi ý câu hỏi: OnCallCX là gì, API ở đâu, tài liệu ở đâu.",
+          "url": "#ai-assistant"
+        },
+        {
+          "title": "Local Mode",
+          "summary": "Chưa gọi backend AI, không gửi dữ liệu ra ngoài.",
+          "url": "#ai-assistant"
+        },
+        {
+          "title": "Future RAG-ready",
+          "summary": "Nền tảng cho semantic search và AI Copilot sau này.",
+          "url": "#ai-assistant"
         }
       ]
+    },
+    {
+      "id": "article-api-center",
+      "title": "API Center",
+      "sidebarId": "api-center",
+      "route": "#api-center",
+      "type": "cms-module",
+      "status": "active",
+      "module": "Enterprise CMS",
+      "summary": "Structured API Reference với search/filter, product grouping, method, endpoint, auth, request/response và copy endpoint.",
+      "tags": [
+        "api-center",
+        "endpoint",
+        "request",
+        "response"
+      ],
+      "cards": [
+        {
+          "title": "Search API",
+          "summary": "Tìm API theo name, endpoint, product và description.",
+          "url": "#api-center"
+        },
+        {
+          "title": "Filter Method",
+          "summary": "Lọc theo GET, POST, PUT, PATCH, DELETE.",
+          "url": "#api-center"
+        },
+        {
+          "title": "Detail Panel",
+          "summary": "Xem request/response và notes.",
+          "url": "#api-center"
+        },
+        {
+          "title": "CMS API Data",
+          "summary": "Đọc product.apiLinks từ CMS data.",
+          "url": "#cms"
+        }
+      ]
+    },
+    {
+      "id": "article-asset-manager-2",
+      "title": "Asset Manager 2.0",
+      "sidebarId": "asset-manager-2",
+      "route": "#asset-manager-2",
+      "type": "cms-module",
+      "status": "active",
+      "module": "Enterprise CMS",
+      "summary": "Asset Manager 2.0 theo hướng metadata-first asset governance: Product, Type, Sidebar, Tag, Version, Owner, Status, Preview và Download.",
+      "tags": [
+        "asset",
+        "metadata",
+        "version",
+        "governance"
+      ],
+      "cards": [
+        {
+          "title": "Metadata-first Asset",
+          "summary": "Mỗi asset có product, type, sidebar, tag, version, owner, status.",
+          "url": "#asset-manager-2"
+        },
+        {
+          "title": "Preview / Thumbnail",
+          "summary": "Chuẩn bị nền cho preview PDF, image, video và thumbnail.",
+          "url": "#asset-manager-2"
+        },
+        {
+          "title": "Version History",
+          "summary": "Quản lý v1.0, v1.1, latest, deprecated.",
+          "url": "#asset-manager-2"
+        },
+        {
+          "title": "Multi-place Publishing",
+          "summary": "Upload một lần, xuất hiện ở Product, Document Center, Search.",
+          "url": "#asset-manager-2"
+        }
+      ]
+    },
+    {
+      "id": "article-document-center",
+      "title": "Document Center",
+      "sidebarId": "document-center",
+      "route": "#document-center",
+      "type": "cms-module",
+      "status": "active",
+      "module": "Enterprise CMS",
+      "summary": "Enterprise Document Center quản lý tài liệu theo Product, Type, Category, Sidebar, Version, Owner, Tags và Status.",
+      "tags": [
+        "document",
+        "asset",
+        "metadata",
+        "download"
+      ],
+      "cards": [
+        {
+          "title": "Metadata",
+          "summary": "Product, Type, Category, Sidebar, Version, Owner, Tags và Status.",
+          "url": "#document-center"
+        },
+        {
+          "title": "Search / Filter",
+          "summary": "Tìm tài liệu theo title, product, tag, owner, type và status.",
+          "url": "#document-center"
+        },
+        {
+          "title": "IndexedDB Assets",
+          "summary": "Đọc asset từ Asset Manager nếu có.",
+          "url": "#document-center"
+        },
+        {
+          "title": "Document Taxonomy",
+          "summary": "Một tài liệu upload một lần có thể xuất hiện ở nhiều khu vực.",
+          "url": "#document-center"
+        }
+      ]
+    },
+    {
+      "id": "article-enterprise-cms",
+      "title": "Enterprise CMS",
+      "sidebarId": "enterprise-cms",
+      "route": "#enterprise-cms",
+      "type": "cms-module",
+      "status": "active",
+      "module": "Enterprise CMS",
+      "summary": "Dashboard quản trị Enterprise CMS: Products, Articles, API Center, Assets, Demo Library, Downloads, Integrations, Compliance, Version, Publish Workflow và Search Index.",
+      "tags": [
+        "cms",
+        "enterprise",
+        "admin",
+        "content"
+      ],
+      "cards": [
+        {
+          "title": "Products",
+          "summary": "Quản lý product, vendor, category, feature, use case và product detail.",
+          "url": "#cms"
+        },
+        {
+          "title": "Articles",
+          "summary": "Quản lý bài viết/card nội dung cho sidebar và customer-facing pages.",
+          "url": "#cms"
+        },
+        {
+          "title": "Publish Workflow",
+          "summary": "Local edit → Export JSON → Git commit → GitHub Pages deployment.",
+          "url": "#cms"
+        },
+        {
+          "title": "Content Health",
+          "summary": "Kiểm tra nhanh dữ liệu trước khi publish.",
+          "url": "#enterprise-cms"
+        }
+      ]
+    },
+    {
+      "id": "article-knowledge-base",
+      "title": "Enterprise Knowledge Base",
+      "sidebarId": "knowledge-base",
+      "route": "#knowledge-base",
+      "type": "cms-module",
+      "status": "active",
+      "module": "Enterprise CMS",
+      "summary": "Knowledge Base gom tri thức Presales từ Products, Articles, Integrations, API và Compliance để hỗ trợ tư vấn và triển khai.",
+      "tags": [
+        "knowledge",
+        "kb",
+        "presales",
+        "best-practice"
+      ],
+      "cards": [
+        {
+          "title": "Product Knowledge",
+          "summary": "Knowledge Sections được lấy từ product data.",
+          "url": "#knowledge-base"
+        },
+        {
+          "title": "Article Knowledge",
+          "summary": "Bài viết và summary được gom vào Knowledge Base.",
+          "url": "#knowledge-base"
+        },
+        {
+          "title": "Integration Knowledge",
+          "summary": "Tổng hợp CRM/ERP/SIP/API integration notes.",
+          "url": "#knowledge-base"
+        },
+        {
+          "title": "Best Practices",
+          "summary": "Nền tảng cho tài liệu hướng dẫn và AI Assistant.",
+          "url": "#knowledge-base"
+        }
+      ]
+    },
+    {
+      "id": "article-global-search",
+      "title": "Global Search",
+      "sidebarId": "global-search",
+      "route": "#global-search",
+      "type": "cms-module",
+      "status": "active",
+      "module": "Enterprise CMS",
+      "summary": "Global Search Engine tìm kiếm xuyên suốt Product, Article, API, Integration, Knowledge, Compliance và Document.",
+      "tags": [
+        "search",
+        "index",
+        "global-search"
+      ],
+      "cards": [
+        {
+          "title": "Indexed Items",
+          "summary": "Product, Article, API, Integration và Knowledge được gom vào search index.",
+          "url": "#global-search"
+        },
+        {
+          "title": "Type Filter",
+          "summary": "Lọc theo content type như Product, API, Article, Knowledge.",
+          "url": "#global-search"
+        },
+        {
+          "title": "Related Routes",
+          "summary": "Kết quả search dẫn về product detail hoặc module liên quan.",
+          "url": "#global-search"
+        },
+        {
+          "title": "Future Semantic Search",
+          "summary": "Nền tảng chuẩn bị cho semantic search/RAG.",
+          "url": "#global-search"
+        }
+      ]
+    },
+    {
+      "id": "article-relationship-graph",
+      "title": "Product Relationship Graph",
+      "sidebarId": "relationship-graph",
+      "route": "#relationship-graph",
+      "type": "cms-module",
+      "status": "active",
+      "module": "Enterprise CMS",
+      "summary": "Relationship Graph hiển thị quan hệ giữa Product, Integration, API, Competitor, Knowledge Sections và Related Documents.",
+      "tags": [
+        "relationship",
+        "graph",
+        "product",
+        "integration"
+      ],
+      "cards": [
+        {
+          "title": "Product Node",
+          "summary": "Mỗi product là một node trung tâm.",
+          "url": "#relationship-graph"
+        },
+        {
+          "title": "API Relationship",
+          "summary": "Liên kết product với API endpoint.",
+          "url": "#relationship-graph"
+        },
+        {
+          "title": "Integration Relationship",
+          "summary": "Liên kết product với CRM/ERP/PBX/SBC/AI.",
+          "url": "#relationship-graph"
+        },
+        {
+          "title": "Competitor Relationship",
+          "summary": "Lưu battle card, đối thủ và điểm khác biệt.",
+          "url": "#relationship-graph"
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "id": "page-oncallcx-overview",
+      "title": "OnCallCX Product Page",
+      "route": "#oncallcx-product-center",
+      "status": "draft",
+      "description": "Trang mẫu được dựng bằng Page Builder.",
+      "sections": [
+        {
+          "type": "hero",
+          "title": "OncallCX - Contact Center As A Service",
+          "subtitle": "Product Center",
+          "content": "Nền tảng Contact Center as a Service do FPT phát triển, hỗ trợ omnichannel, AI, dashboard, recording và API integration."
+        },
+        {
+          "type": "cards",
+          "title": "Nội dung chính",
+          "items": [
+            {
+              "title": "Overview",
+              "content": "Tổng quan giải pháp OnCallCX."
+            },
+            {
+              "title": "Presentation",
+              "content": "Tài liệu trình chiếu sản phẩm."
+            },
+            {
+              "title": "Demo Video",
+              "content": "Kịch bản demo cho khách hàng."
+            },
+            {
+              "title": "API Reference",
+              "content": "Tài liệu API/Webhook tích hợp."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "cmsModules": [
+    {
+      "id": "module-video-conference",
+      "title": "Video Conference CMS",
+      "route": "#video-conferencing",
+      "status": "active",
+      "collection": "articles/products",
+      "description": "Brand, product, room, feature, battle card and CMS relationship data."
+    },
+    {
+      "id": "module-enterprise-cms",
+      "title": "Enterprise CMS",
+      "route": "#enterprise-cms",
+      "status": "active",
+      "collection": "articles/products/assets",
+      "description": "Enterprise knowledge platform CMS modules."
+    },
+    {
+      "id": "module-api-center",
+      "title": "API Center",
+      "route": "#api-center",
+      "status": "active",
+      "collection": "products.apiLinks",
+      "description": "Structured API catalog."
+    },
+    {
+      "id": "module-document-center",
+      "title": "Document Center",
+      "route": "#document-center",
+      "status": "active",
+      "collection": "documents/assets",
+      "description": "Document metadata and asset relationship."
+    }
+  ],
+  "navigationCoverage": {
+    "version": "VC 1.4.4 + v10.7.1",
+    "staticSidebar": true,
+    "videoConferenceRoutes": [
+      "#video-conferencing",
+      "#vc-yealink",
+      "#vc-logitech",
+      "#vc-poly",
+      "#vc-cisco",
+      "#vc-jabra",
+      "#vc-crestron",
+      "#vc-huddle-room",
+      "#vc-medium-large-room"
+    ],
+    "enterpriseRoutes": [
+      "#enterprise-cms",
+      "#api-center",
+      "#document-center",
+      "#global-search",
+      "#asset-manager-2",
+      "#relationship-graph",
+      "#knowledge-base",
+      "#ai-assistant"
+    ],
+    "oncallcxFamily": {
+      "version": "v10.8.3-oncallcx-family-reclass",
+      "parent": "#oncallcx",
+      "children": [
+        "#oncallcx-ucaas",
+        "#oncallcx-ccaas"
+      ],
+      "note": "OnCallCX UCaaS moved from UC/PBX Việt Nam into OnCallCX product family. UCaaS and CCaaS remain separate modules."
+    },
+    "oncallcxProductPortal": {
+      "version": "v10.9.0-oncallcx-product-portal",
+      "parentRoute": "#oncallcx",
+      "moduleRoutes": [
+        "#oncallcx-ucaas",
+        "#oncallcx-ccaas"
+      ],
+      "behavior": "Routes render the OnCallCX Product Portal and focus the requested module.",
+      "relationshipModel": "Product -> Module -> Feature -> API -> Document -> Demo"
+    }
+  },
+  "cmsAudit": {
+    "lastRunAt": "2026-06-26T10:53:22.715Z",
+    "before": {
+      "requiredArticleCount": 26,
+      "currentArticleCount": 29,
+      "requiredProductCount": 6,
+      "currentVideoProductCount": 6,
+      "missingRoutes": [],
+      "incompleteArticles": []
+    },
+    "after": {
+      "requiredArticleCount": 26,
+      "currentArticleCount": 29,
+      "requiredProductCount": 6,
+      "currentVideoProductCount": 6,
+      "missingRoutes": [],
+      "incompleteArticles": []
+    },
+    "fixedMissingRouteCount": 0,
+    "fixedIncompleteArticleCount": 0
+  },
+  "auth": {
+    "auditLogs": [
+      {
+        "id": "audit-1782472832102-02e0a89c6083b8",
+        "at": "2026-06-26T11:20:32.102Z",
+        "actor": "anonymous",
+        "role": "guest",
+        "action": "system.seed_admin",
+        "detail": {
+          "username": "admin"
+        }
+      },
+      {
+        "id": "audit-1782472836747-d94a4ea57f99d8",
+        "at": "2026-06-26T11:20:36.747Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.login_success",
+        "detail": {
+          "username": "admin",
+          "role": "admin"
+        }
+      },
+      {
+        "id": "audit-1782472872271-081e746761236",
+        "at": "2026-06-26T11:21:12.271Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.logout",
+        "detail": {
+          "username": "admin"
+        }
+      },
+      {
+        "id": "audit-1782472875098-ef4c927e88a4f8",
+        "at": "2026-06-26T11:21:15.098Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.login_success",
+        "detail": {
+          "username": "admin",
+          "role": "admin"
+        }
+      },
+      {
+        "id": "audit-1782473502172-ee3b07fdbd787",
+        "at": "2026-06-26T11:31:42.172Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.logout",
+        "detail": {
+          "username": "admin"
+        }
+      },
+      {
+        "id": "audit-1782473536624-c552674b17787",
+        "at": "2026-06-26T11:32:16.624Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.login_success",
+        "detail": {
+          "username": "admin",
+          "role": "admin"
+        }
+      },
+      {
+        "id": "audit-1782473558519-7a3b9356c2d2f",
+        "at": "2026-06-26T11:32:38.519Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.login_success",
+        "detail": {
+          "username": "admin",
+          "role": "admin"
+        }
+      },
+      {
+        "id": "audit-1782473907832-a37724fbe0319",
+        "at": "2026-06-26T11:38:27.832Z",
+        "actor": "anonymous",
+        "role": "guest",
+        "action": "auth.logout",
+        "detail": {}
+      },
+      {
+        "id": "audit-1782473909055-51e9c1dcc389c",
+        "at": "2026-06-26T11:38:29.055Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.login_success",
+        "detail": {
+          "username": "admin",
+          "role": "admin"
+        }
+      },
+      {
+        "id": "audit-1782513330697-74d6db3ef975a",
+        "at": "2026-06-26T22:35:30.697Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.login_success",
+        "detail": {
+          "username": "admin",
+          "role": "admin"
+        }
+      },
+      {
+        "id": "audit-1782518827304-60a48bfbff7f",
+        "at": "2026-06-27T00:07:07.304Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.login_success",
+        "detail": {
+          "username": "admin",
+          "role": "admin"
+        }
+      },
+      {
+        "id": "audit-1782519124010-bcfe11e1ed30e",
+        "at": "2026-06-27T00:12:04.010Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.login_success",
+        "detail": {
+          "username": "admin",
+          "role": "admin"
+        }
+      },
+      {
+        "id": "audit-1782698053162-ac49ddedcb2688",
+        "at": "2026-06-29T01:54:13.162Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.session_expired",
+        "detail": {
+          "username": "admin"
+        }
+      },
+      {
+        "id": "audit-1782698271994-42b918d5747df",
+        "at": "2026-06-29T01:57:51.994Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.login_success",
+        "detail": {
+          "username": "admin",
+          "role": "admin"
+        }
+      },
+      {
+        "id": "audit-1782707916908-d184aa277eabd8",
+        "at": "2026-06-29T04:38:36.908Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.login_success",
+        "detail": {
+          "username": "admin",
+          "role": "admin"
+        }
+      },
+      {
+        "id": "audit-1782707939843-e79d160a1f3cf",
+        "at": "2026-06-29T04:38:59.843Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "users.create",
+        "detail": {
+          "username": "toannq"
+        }
+      },
+      {
+        "id": "audit-1782707960495-67470abc97cb78",
+        "at": "2026-06-29T04:39:20.495Z",
+        "actor": "toannq",
+        "role": "admin",
+        "action": "auth.login_success",
+        "detail": {
+          "username": "toannq",
+          "role": "admin"
+        }
+      },
+      {
+        "id": "audit-1782782240074-f02f1b93fd2c4",
+        "at": "2026-06-30T01:17:20.074Z",
+        "actor": "toannq",
+        "role": "admin",
+        "action": "auth.session_expired",
+        "detail": {
+          "username": "toannq"
+        }
+      },
+      {
+        "id": "audit-1782786996715-3f9ca2e34a4cf",
+        "at": "2026-06-30T02:36:36.715Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "auth.login_success",
+        "detail": {
+          "username": "admin",
+          "role": "admin"
+        }
+      },
+      {
+        "id": "audit-1782792656376-843c5d1fb23e8",
+        "at": "2026-06-30T04:10:56.376Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "users.update_groups",
+        "detail": {
+          "username": "admin",
+          "groupIds": [
+            "group-admin",
+            "group-video-viewer"
+          ]
+        }
+      },
+      {
+        "id": "audit-1782792657753-5e9d385bbe9c1",
+        "at": "2026-06-30T04:10:57.753Z",
+        "actor": "admin",
+        "role": "admin",
+        "action": "users.update_groups",
+        "detail": {
+          "username": "admin",
+          "groupIds": [
+            "group-admin"
+          ]
+        }
+      }
+    ],
+    "updatedAt": "2026-06-30T04:10:57.756Z"
+  },
+  "productPortals": [
+    {
+      "id": "oncallcx",
+      "title": "OnCallCX",
+      "category": "Contact Center",
+      "family": "OnCallCX",
+      "type": "product-portal",
+      "route": "#oncallcx",
+      "status": "active",
+      "summary": "OnCallCX là nền tảng Customer Experience Platform của FPT, bao gồm hai phân hệ độc lập: UCaaS cho tổng đài PBX và CCaaS cho Contact Center.",
+      "description": "OnCallCX được tổ chức theo mô hình Product Portal. UCaaS tập trung vào telephony/PBX foundation, còn CCaaS tập trung vào vận hành Contact Center, AI Voicebot, Omnichannel, Recording, Analytics, Campaign và CRM/ERP Integration.",
+      "tags": [
+        "oncallcx",
+        "product-portal",
+        "ucaas",
+        "ccaas",
+        "customer-experience",
+        "fpt"
+      ],
+      "modules": [
+        "oncallcx-ucaas",
+        "oncallcx-ccaas"
+      ],
+      "apiLinks": [
+        {
+          "method": "GET",
+          "path": "/ucaas/extensions",
+          "description": "UCaaS - danh sách extension"
+        },
+        {
+          "method": "POST",
+          "path": "/ucaas/extensions",
+          "description": "UCaaS - tạo extension"
+        },
+        {
+          "method": "GET",
+          "path": "/ucaas/cdr",
+          "description": "UCaaS - truy vấn CDR"
+        },
+        {
+          "method": "POST",
+          "path": "/ccaas/call/outbound",
+          "description": "CCaaS - khởi tạo outbound call"
+        },
+        {
+          "method": "POST",
+          "path": "/ccaas/webhook/incoming",
+          "description": "CCaaS - nhận event cuộc gọi realtime"
+        },
+        {
+          "method": "GET",
+          "path": "/ccaas/recording/{id}",
+          "description": "CCaaS - truy xuất ghi âm"
+        }
+      ],
+      "documents": [
+        "presentation-oncallcx",
+        "datasheet-oncallcx-ucaas",
+        "datasheet-oncallcx-ccaas",
+        "demo-script-oncallcx",
+        "api-spec-oncallcx"
+      ],
+      "relationshipModel": "Product -> Module -> Feature -> API -> Document -> Demo"
+    }
+  ],
+  "productModules": [
+    {
+      "id": "oncallcx-ucaas",
+      "parent": "oncallcx",
+      "title": "OnCallCX UCaaS",
+      "label": "UCaaS",
+      "route": "#oncallcx-ucaas",
+      "badge": "PBX",
+      "icon": "☎️",
+      "subtitle": "Cloud PBX · Enterprise Telephony",
+      "summary": "Phân hệ tổng đài PBX cloud/hosted: Extension, User, SIP Trunk, Number Plan, Call Routing, IVR, Ring Group, Voicemail và API-ready integration.",
+      "scope": "OnCallCX UCaaS chỉ thuần về tổng đài PBX và telephony foundation.",
+      "tags": [
+        "PBX",
+        "Extension",
+        "SIP Trunk",
+        "Call Routing",
+        "API-ready"
+      ],
+      "features": [
+        {
+          "title": "Cloud PBX",
+          "summary": "Tổng đài PBX cloud/hosted, quản lý extension và user tập trung."
+        },
+        {
+          "title": "Extension / User",
+          "summary": "Tạo extension, user, voicemail, quyền gọi và nhóm người dùng."
+        },
+        {
+          "title": "SIP Trunk",
+          "summary": "Kết nối đầu số, SIP trunk, DID, outbound/inbound route và prefix."
+        },
+        {
+          "title": "IVR / Ring Group",
+          "summary": "Cấu hình lời chào, IVR, ring group và call distribution cơ bản."
+        },
+        {
+          "title": "CDR / Call Log",
+          "summary": "Ghi nhận lịch sử cuộc gọi, trạng thái, thời lượng và metadata cơ bản."
+        },
+        {
+          "title": "API-ready",
+          "summary": "API chờ tích hợp cho provisioning, CDR, click-to-call hoặc CRM extension."
+        }
+      ],
+      "apiLinks": [
+        {
+          "method": "GET",
+          "path": "/ucaas/extensions",
+          "description": "Danh sách extension"
+        },
+        {
+          "method": "POST",
+          "path": "/ucaas/extensions",
+          "description": "Tạo extension"
+        },
+        {
+          "method": "PATCH",
+          "path": "/ucaas/extensions/{id}",
+          "description": "Cập nhật extension"
+        },
+        {
+          "method": "GET",
+          "path": "/ucaas/cdr",
+          "description": "Truy vấn CDR UCaaS"
+        },
+        {
+          "method": "POST",
+          "path": "/ucaas/click-to-call",
+          "description": "Click-to-call từ hệ thống tích hợp"
+        }
+      ],
+      "documents": [
+        "datasheet-oncallcx-ucaas",
+        "ucaas-api-spec",
+        "ucaas-deployment-checklist"
+      ],
+      "demo": [
+        "ucaas-extension-provisioning",
+        "ucaas-call-routing-demo"
+      ],
+      "notIncluded": [
+        "AI Voicebot",
+        "Omnichannel",
+        "Advanced Analytics",
+        "Recording QA/QC",
+        "Campaign",
+        "CRM workflow"
+      ]
+    },
+    {
+      "id": "oncallcx-ccaas",
+      "parent": "oncallcx",
+      "title": "OnCallCX CCaaS",
+      "label": "CCaaS",
+      "route": "#oncallcx-ccaas",
+      "badge": "Contact Center",
+      "icon": "🎧",
+      "subtitle": "Contact Center · AI · Omnichannel",
+      "summary": "Phân hệ Contact Center: AI Voicebot, Omnichannel, Analytics/Dashboard, Recording, Campaign/Outbound và CRM/ERP Integration.",
+      "scope": "OnCallCX CCaaS là lớp vận hành chăm sóc khách hàng và contact center.",
+      "tags": [
+        "AI Voicebot",
+        "Omnichannel",
+        "Analytics",
+        "Recording",
+        "CRM/ERP Integration"
+      ],
+      "features": [
+        {
+          "title": "AI Voicebot",
+          "summary": "Tự động hóa cuộc gọi, kịch bản thoại, chuyển agent và ghi nhận kết quả."
+        },
+        {
+          "title": "Omnichannel",
+          "summary": "Voice, Chat, Email, Social và digital channels trong cùng hàng đợi."
+        },
+        {
+          "title": "Analytics / Dashboard",
+          "summary": "Realtime dashboard, agent performance, queue, SLA và campaign report."
+        },
+        {
+          "title": "Recording",
+          "summary": "Ghi âm, tra soát, QA/QC và báo cáo lịch sử cuộc gọi."
+        },
+        {
+          "title": "Campaign / Outbound",
+          "summary": "Telesales, gọi ra tự động, campaign list và tracking kết quả."
+        },
+        {
+          "title": "CRM/ERP Integration",
+          "summary": "Screen pop, ticket, customer sync, call log và workflow CSKH."
+        }
+      ],
+      "apiLinks": [
+        {
+          "method": "POST",
+          "path": "/ccaas/call/outbound",
+          "description": "Khởi tạo outbound call"
+        },
+        {
+          "method": "POST",
+          "path": "/ccaas/webhook/incoming",
+          "description": "Nhận event cuộc gọi realtime"
+        },
+        {
+          "method": "POST",
+          "path": "/ccaas/campaign",
+          "description": "Tạo/cập nhật campaign"
+        },
+        {
+          "method": "GET",
+          "path": "/ccaas/queue/status",
+          "description": "Trạng thái queue/agent"
+        },
+        {
+          "method": "GET",
+          "path": "/ccaas/recording/{id}",
+          "description": "Truy xuất ghi âm"
+        }
+      ],
+      "documents": [
+        "datasheet-oncallcx-ccaas",
+        "ccaas-api-spec",
+        "ccaas-crm-integration-guide"
+      ],
+      "demo": [
+        "ccaas-inbound-screenpop",
+        "ccaas-outbound-campaign",
+        "ccaas-dashboard-demo"
+      ],
+      "included": [
+        "AI Voicebot",
+        "Omnichannel",
+        "Analytics/Dashboard",
+        "Recording",
+        "Campaign",
+        "CRM/ERP Integration"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel-oncallcx-1",
+      "from": "oncallcx",
+      "to": "oncallcx-ucaas",
+      "type": "has-module"
+    },
+    {
+      "id": "rel-oncallcx-2",
+      "from": "oncallcx",
+      "to": "oncallcx-ccaas",
+      "type": "has-module"
+    },
+    {
+      "id": "rel-oncallcx-3",
+      "from": "oncallcx-ucaas",
+      "to": "api-reference",
+      "type": "uses-api"
+    },
+    {
+      "id": "rel-oncallcx-4",
+      "from": "oncallcx-ccaas",
+      "to": "api-reference",
+      "type": "uses-api"
+    },
+    {
+      "id": "rel-oncallcx-5",
+      "from": "oncallcx-ccaas",
+      "to": "crm",
+      "type": "integrates-with"
+    },
+    {
+      "id": "rel-oncallcx-6",
+      "from": "oncallcx",
+      "to": "document-center",
+      "type": "has-document"
+    },
+    {
+      "id": "rel-oncallcx-7",
+      "from": "oncallcx",
+      "to": "demo",
+      "type": "has-demo"
+    },
+    {
+      "id": "rel-oncallcx-family-ucaas",
+      "from": "oncallcx-family",
+      "to": "oncallcx-ucaas",
+      "type": "has-product-line"
+    },
+    {
+      "id": "rel-oncallcx-family-ccaas",
+      "from": "oncallcx-family",
+      "to": "oncallcx-ccaas",
+      "type": "has-product-line"
+    },
+    {
+      "id": "rel-oncallcx-ucaas-presentation",
+      "from": "oncallcx-ucaas",
+      "to": "doc-oncallcx-ucaas-presentation",
+      "type": "has-presentation"
+    },
+    {
+      "id": "rel-oncallcx-ccaas-presentation",
+      "from": "oncallcx-ccaas",
+      "to": "doc-oncallcx-ccaas-presentation",
+      "type": "has-presentation"
+    }
+  ],
+  "searchIndexHints": {
+    "oncallcx": [
+      "oncallcx",
+      "product-portal",
+      "ucaas",
+      "ccaas",
+      "customer-experience",
+      "fpt",
+      "OnCallCX UCaaS",
+      "UCaaS",
+      "PBX",
+      "Extension",
+      "SIP Trunk",
+      "Call Routing",
+      "API-ready",
+      "Cloud PBX",
+      "Extension / User",
+      "SIP Trunk",
+      "IVR / Ring Group",
+      "CDR / Call Log",
+      "API-ready",
+      "OnCallCX CCaaS",
+      "CCaaS",
+      "AI Voicebot",
+      "Omnichannel",
+      "Analytics",
+      "Recording",
+      "CRM/ERP Integration",
+      "AI Voicebot",
+      "Omnichannel",
+      "Analytics / Dashboard",
+      "Recording",
+      "Campaign / Outbound",
+      "CRM/ERP Integration",
+      "GET /ucaas/extensions Danh sách extension",
+      "POST /ucaas/extensions Tạo extension",
+      "PATCH /ucaas/extensions/{id} Cập nhật extension",
+      "GET /ucaas/cdr Truy vấn CDR UCaaS",
+      "POST /ucaas/click-to-call Click-to-call từ hệ thống tích hợp",
+      "POST /ccaas/call/outbound Khởi tạo outbound call",
+      "POST /ccaas/webhook/incoming Nhận event cuộc gọi realtime",
+      "POST /ccaas/campaign Tạo/cập nhật campaign",
+      "GET /ccaas/queue/status Trạng thái queue/agent",
+      "GET /ccaas/recording/{id} Truy xuất ghi âm"
+    ]
+  },
+  "documents": [
+    {
+      "id": "presentation-oncallcx-ucaas",
+      "title": "OnCallCX UCaaS Presentation",
+      "type": "presentation",
+      "productId": "oncallcx-ucaas",
+      "route": "#presentation-oncallcx-ucaas",
+      "status": "active"
+    },
+    {
+      "id": "presentation-oncallcx-ccaas",
+      "title": "OnCallCX CCaaS Presentation",
+      "type": "presentation",
+      "productId": "oncallcx",
+      "route": "#presentation-oncallcx-ccaas",
+      "status": "active"
+    },
+    {
+      "id": "doc-oncallcx-ucaas-presentation",
+      "title": "OnCallCX UCaaS Presentation",
+      "type": "presentation",
+      "productId": "oncallcx-ucaas",
+      "fileName": "OnCallCX_UCaaS_Presentation.pdf",
+      "url": "#document-center",
+      "status": "active"
+    },
+    {
+      "id": "doc-oncallcx-ccaas-presentation",
+      "title": "OnCallCX CCaaS Presentation",
+      "type": "presentation",
+      "productId": "oncallcx-ccaas",
+      "fileName": "OnCallCX_CCaaS_Presentation.pdf",
+      "url": "#document-center",
+      "status": "active"
     }
   ]
 }
