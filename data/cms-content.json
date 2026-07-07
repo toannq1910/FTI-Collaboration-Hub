@@ -1,9 +1,9 @@
 {
   "meta": {
-    "version": "v9.5.0",
+    "version": "v10.8.4-public-cache-sync",
     "name": "Unified Product CMS",
-    "updatedAt": "2026-06-29",
-    "description": "Operational CMS Guide and Sidebar Articles migration.",
+    "updatedAt": "2026-07-07",
+    "description": "Official CMS seed for public GitHub Pages. Runtime seed sync is disabled by default to avoid stale browser data.",
     "cmsCoverage": "full-content-sync",
     "cmsCoverageUpdatedAt": "2026-06-26T10:53:22.714Z",
     "oncallcxReclass": "v10.8.3-oncallcx-family-reclass",

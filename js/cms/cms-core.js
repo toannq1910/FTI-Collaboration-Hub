@@ -1,6 +1,7 @@
-/* v9.4.0 CMS Core */
-export const CMS_URL = 'data/cms-content.json';
-export const CMS_KEY = 'fti_collaboration_hub_cms_v920';
+/* v10.8.4 CMS Core */
+export const CMS_VERSION = '20260707-1';
+export const CMS_URL = `data/cms-content.json?v=${CMS_VERSION}`;
+export const CMS_KEY = `fti_collaboration_hub_cms_${CMS_VERSION}`;
 export const $ = (s, r = document) => r.querySelector(s);
 export const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 

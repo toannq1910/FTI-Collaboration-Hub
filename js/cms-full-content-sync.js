@@ -16,6 +16,7 @@ import { loadCms, saveCms, esc } from './cms/cms-core.js';
 
 const SYNC_VERSION = 'v10.7.1-cms-full-content-sync';
 const SYNC_STORAGE_KEY = 'fti_cms_full_content_sync_version';
+const AUTO_SYNC_ENABLED = false;
 
 const ARTICLE_SEEDS = [
   {
@@ -619,6 +620,8 @@ function buildAudit(data) {
 }
 
 async function runSync(force = false) {
+  if (!force && !AUTO_SYNC_ENABLED) return null;
+
   const currentVersion = localStorage.getItem(SYNC_STORAGE_KEY);
   if (currentVersion === SYNC_VERSION && !force) return null;
 
@@ -747,7 +750,6 @@ async function renderAudit() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => runSync(false), 400);
   setTimeout(renderAudit, 600);
 });
 window.addEventListener('hashchange', () => {
