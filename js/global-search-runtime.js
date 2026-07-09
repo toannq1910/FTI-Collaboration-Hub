@@ -3,7 +3,7 @@ import { loadCms, esc } from './cms/cms-core.js';
 
 const fallbackItems = [
   {type:'Product', title:'OnCallCX', desc:'Contact Center as a Service made by FPT.', route:'#product-detail:oncallcx', tags:['oncallcx','ccaas','fpt']},
-  {type:'API', title:'OnCallCX CDR API', desc:'Truy vấn lịch sử cuộc gọi và metadata.', route:'#api-center', tags:['api','cdr','recording']},
+  {type:'API', title:'OnCallCX API Reference', desc:'REST API, CTI API và Webhook OnCallCX UCaaS.', route:'#api-reference', tags:['api','rest','cti','webhook']},
   {type:'Document', title:'OnCallCX Product Presentation', desc:'Tài liệu trình chiếu giới thiệu OnCallCX.', route:'#document-center', tags:['presentation','document']},
   {type:'Article', title:'CRM/ERP Việt Nam', desc:'Danh mục CRM/ERP có thể tích hợp Contact Center.', route:'#crm', tags:['crm','erp','integration']},
   {type:'Compliance', title:'Compliance Checklist', desc:'Ghi âm, bảo mật, dữ liệu cá nhân và audit.', route:'#compliance', tags:['compliance','security']}
@@ -28,7 +28,7 @@ function buildIndex(data){
   const items = [];
   (data.products || []).forEach(p => {
     items.push({type:'Product', title:p.title || p.id, desc:p.summary || '', route:`#product-detail:${p.id}`, tags:[...(p.tags||[]), p.category, p.vendor].filter(Boolean)});
-    (p.apiLinks || []).forEach(api => items.push({type:'API', title:api.name || api.path, desc:api.description || '', route:'#api-center', tags:['api', api.method, p.title].filter(Boolean)}));
+    (p.apiLinks || []).forEach(api => items.push({type:'API', title:api.name || api.path, desc:api.description || '', route:'#api-reference', tags:['api', api.method, p.title].filter(Boolean)}));
     (p.integrations || []).forEach(g => items.push({type:'Integration', title:g.name || 'Integration', desc:(g.items||[]).join(', '), route:`#product-detail:${p.id}`, tags:['integration', p.title].filter(Boolean)}));
     (p.knowledgeSections || []).forEach(s => items.push({type:'Knowledge', title:s.title || 'Knowledge', desc:s.content || '', route:`#product-detail:${p.id}`, tags:['knowledge', p.title].filter(Boolean)}));
   });

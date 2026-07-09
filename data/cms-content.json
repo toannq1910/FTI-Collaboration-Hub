@@ -1800,7 +1800,7 @@
         },
         {
           "title": "API Reference",
-          "summary": "API/Webhook, CDR, Recording và tích hợp CRM/ERP.",
+          "summary": "REST API, CTI API và Webhook OnCallCX UCaaS.",
           "url": "#api-reference"
         }
       ],
@@ -1977,27 +1977,27 @@
       "route": "#api-reference",
       "type": "api-reference",
       "status": "active",
-      "summary": "Thư mục chứa các bài viết API, webhook, CDR, recording và integration spec đã được gom về một nơi.",
+      "summary": "Bộ tài liệu API OnCallCX UCaaS gồm REST API, CTI API/CSTA/anCTI và Webhook realtime. Nội dung được trích từ file tài liệu gốc và chỉ tự kiểm thử các API đọc dữ liệu an toàn.",
       "cards": [
         {
-          "title": "API Center",
-          "summary": "Structured API Reference với search, filter, request/response và copy endpoint.",
-          "url": "#api-center"
+          "title": "REST API OnCallCX UCaaS",
+          "summary": "Quản trị PBX, extension/address, terminal, CDR, contacts, forwards, audioFiles và các object tích hợp qua REST.",
+          "url": "#api-reference"
         },
         {
-          "title": "CDR API",
-          "summary": "Truy vấn lịch sử cuộc gọi, trạng thái, thời lượng và metadata.",
-          "url": "#api-center"
+          "title": "CTI API / anCTI",
+          "summary": "Call control, device monitoring, CSTA services/events, ctiDomain, ctiUrl và ctiDeviceId cho webphone/click-to-call.",
+          "url": "#api-reference"
         },
         {
-          "title": "Webhook Incoming",
-          "summary": "Nhận sự kiện cuộc gọi realtime để tích hợp CRM/ERP.",
-          "url": "#api-center"
+          "title": "Webhook Events",
+          "summary": "Cấu hình webhook và payload call_start, cdr_target_*, call_cdr, extension_status để đồng bộ CRM/ERP realtime.",
+          "url": "#api-reference"
         },
         {
-          "title": "Recording API",
-          "summary": "Truy xuất ghi âm phục vụ QA/QC và tra soát.",
-          "url": "#api-center"
+          "title": "API Spec Files",
+          "summary": "Tài liệu gốc REST, CTI và Webhook đã được đưa vào Asset Manager dưới loại API Spec.",
+          "url": "#cms"
         }
       ],
       "module": "CONTACT CENTER",
@@ -2419,7 +2419,7 @@
         {
           "title": "Webhook Events",
           "summary": "Nhận sự kiện realtime để kích hoạt workflow.",
-          "url": "#api-center"
+          "url": "#api-reference"
         },
         {
           "title": "SIP / SBC Integration",
@@ -2488,7 +2488,7 @@
         {
           "title": "API Security",
           "summary": "Token, signature, rate limit, audit log và quyền truy cập API.",
-          "url": "#api-center"
+          "url": "#api-reference"
         },
         {
           "title": "Compliance Checklist",
@@ -2579,7 +2579,7 @@
       "id": "article-api-center",
       "title": "API Center",
       "sidebarId": "api-center",
-      "route": "#api-center",
+      "route": "#api-reference",
       "type": "cms-module",
       "status": "active",
       "module": "Enterprise CMS",
@@ -2594,17 +2594,17 @@
         {
           "title": "Search API",
           "summary": "Tìm API theo name, endpoint, product và description.",
-          "url": "#api-center"
+          "url": "#api-reference"
         },
         {
           "title": "Filter Method",
           "summary": "Lọc theo GET, POST, PUT, PATCH, DELETE.",
-          "url": "#api-center"
+          "url": "#api-reference"
         },
         {
           "title": "Detail Panel",
           "summary": "Xem request/response và notes.",
-          "url": "#api-center"
+          "url": "#api-reference"
         },
         {
           "title": "CMS API Data",
@@ -2900,7 +2900,7 @@
     {
       "id": "module-api-center",
       "title": "API Center",
-      "route": "#api-center",
+      "route": "#api-reference",
       "status": "active",
       "collection": "products.apiLinks",
       "description": "Structured API catalog."
@@ -2930,7 +2930,7 @@
     ],
     "enterpriseRoutes": [
       "#enterprise-cms",
-      "#api-center",
+      "#api-reference",
       "#document-center",
       "#global-search",
       "#asset-manager-2",

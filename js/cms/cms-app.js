@@ -10,13 +10,14 @@ import { renderCmsArticles, bindCmsArticles } from './cms-articles.js';
 
 let currentCms = null;
 
-const CMS_TABS = new Set(['preview','articles','products','graph','assets','backup']);
+const CMS_TABS = new Set(['preview','articles','products','graph','assets','icons','backup']);
 const MODULE_DESCRIPTIONS = {
   preview: 'Xem nhanh dữ liệu hiện có trong CMS để kiểm tra tổng quan trước khi chỉnh sửa. Module này không tạo, sửa hoặc xóa nội dung.',
   articles: 'Nơi quản lý tất cả bài viết và card hiển thị ngoài portal. Khi tạo bài viết mới, dùng Route hoặc URL card để quyết định nội dung sẽ mở ở trang nào.',
   products: 'Quản lý dữ liệu cấu trúc của sản phẩm như vendor, category, feature, tag, status và điểm tư vấn. Module này không thay thế CMS Articles.',
   graph: 'Quản lý các dữ liệu kỹ thuật gắn với sản phẩm như API link, integration note, competitor và knowledge section.',
   assets: 'Upload và gắn file theo sản phẩm: Presentation, User Guide, Datasheet, Demo Video, Image, API Spec, Case Study. Presentation và tài liệu hướng dẫn sử dụng đều upload tại đây.',
+  icons: 'Quản lý icon hiển thị ở sidebar cho nhóm và bài viết. Upload ảnh thay thế, lưu cấu hình và export JSON để publish lên GitHub Pages.',
   backup: 'Xuất hoặc nhập lại file JSON CMS để sao lưu dữ liệu và chuyển dữ liệu giữa các máy/trình duyệt.'
 };
 
@@ -52,6 +53,7 @@ export function renderCms(data, activeTab = 'preview'){
     <button class="${activeTab === 'products' ? 'active' : ''}" data-cms-tab="products">Product Data</button>
     <button class="${activeTab === 'graph' ? 'active' : ''}" data-cms-tab="graph">API / Knowledge</button>
     <button class="${activeTab === 'assets' ? 'active' : ''}" data-cms-tab="assets">Asset Manager</button>
+    <button class="${activeTab === 'icons' ? 'active' : ''}" data-cms-tab="icons">Sidebar Icons</button>
     <button class="${activeTab === 'backup' ? 'active' : ''}" data-cms-tab="backup">Backup / Restore</button>
   </section>
 
@@ -60,6 +62,7 @@ export function renderCms(data, activeTab = 'preview'){
   <section class="cms-panel ${activeTab === 'products' ? 'active' : ''}" id="cms-products">${renderProductManager(data, moduleDescription('products'))}</section>
   <section class="cms-panel ${activeTab === 'graph' ? 'active' : ''}" id="cms-graph">${renderKnowledgeGraphManager(data, moduleDescription('graph'))}</section>
   <section class="cms-panel ${activeTab === 'assets' ? 'active' : ''}" id="cms-assets">${renderAssetManager(data, moduleDescription('assets'))}</section>
+  <section class="cms-panel ${activeTab === 'icons' ? 'active' : ''}" id="cms-icons"><div class="cms-empty-state">Đang tải Sidebar Icons...</div></section>
   <section class="cms-panel ${activeTab === 'backup' ? 'active' : ''}" id="cms-backup">${renderBackupPanel(moduleDescription('backup'))}</section>`;
 
   bindCms();
@@ -87,7 +90,24 @@ function bindActiveCmsPanel(activeTab){
   if(activeTab === 'articles') bindCmsArticles(currentCms, renderCms);
   if(activeTab === 'graph') bindKnowledgeGraphManager(currentCms, renderCms);
   if(activeTab === 'assets') bindAssetManager(currentCms);
+  if(activeTab === 'icons') bindSidebarIconManager();
   if(activeTab === 'backup') bindBackupPanel(currentCms, renderCms);
+}
+
+function bindSidebarIconManager(){
+  const panel = $('#cms-icons');
+  if(!panel) return;
+  const render = () => {
+    if(window.SidebarIconRuntime?.renderCmsPanel){
+      window.SidebarIconRuntime.renderCmsPanel(panel);
+      return true;
+    }
+    return false;
+  };
+  if(render()) return;
+  setTimeout(() => {
+    if(!render()) panel.innerHTML = '<div class="cms-empty-state">Không tải được Sidebar Icons. Vui lòng refresh trang.</div>';
+  }, 180);
 }
 
 export async function openCms(){

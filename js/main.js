@@ -18,7 +18,7 @@ function videoHashFromPage(page=''){
   return '';
 }
 function isSystemSecurityPage(page=''){
-  return ['users','permissions','audit-log'].includes(String(page||''));
+  return ['users','permissions','audit-log','sidebar-icons'].includes(String(page||''));
 }
 function resolvePageFromHash(){
   const h=location.hash.replace('#','');
@@ -1124,24 +1124,13 @@ async function ocxGetPresentationPathOrDefault(){
 
 /* ========= Auth ========= */
 function initAuth(){
-  const chip=$('#permissionChip');
-  chip.textContent=CONFIG.LOGIN_REQUIRED?'Login: ON':'Login: OFF';
-  chip.style.color=CONFIG.LOGIN_REQUIRED?'#fdba74':'#86efac';
-  if(!CONFIG.LOGIN_REQUIRED)return;
-  const raw=sessionStorage.getItem(CONFIG.SESSION_KEY)||localStorage.getItem(CONFIG.SESSION_KEY);
-  if(raw){try{if(Date.now()<JSON.parse(raw).expiresAt)return}catch{}}
-  $('#loginOverlay').hidden=false;
+  // Enterprise auth runtime owns login UI/session.
 }
 function login(email){
-  sessionStorage.setItem(CONFIG.SESSION_KEY,JSON.stringify({email,expiresAt:Date.now()+8*3600*1000}));
-  $('#loginOverlay').hidden=true;
-  toast('Đăng nhập demo thành công');
+  window.FTIAuth?.login?.(email);
 }
 function logout(){
-  sessionStorage.removeItem(CONFIG.SESSION_KEY);
-  localStorage.removeItem(CONFIG.SESSION_KEY);
-  if(CONFIG.LOGIN_REQUIRED)$('#loginOverlay').hidden=false;
-  toast('Đã xóa session demo');
+  window.FTIAuth?.logout?.();
 }
 
 /* ========= UI ========= */
@@ -2238,8 +2227,6 @@ function bindGlobal(){
   $('#mobileMenu').onclick=()=>$('#sidebar').classList.toggle('open');
   $('#themeToggle').onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='light'?'dark':'light'};
   $('#globalSearch').oninput=e=>{const q=e.target.value.toLowerCase().trim();if(!q)return;const f=allContentItems().find(s=>[s.title,s.type,s.desc,(s.chips||[]).join(' ')].join(' ').toLowerCase().includes(q));if(f)navigate(f.id)};
-  $('#loginForm').onsubmit=e=>{e.preventDefault();login($('#loginEmail').value)};
-  $('#logoutBtn').onclick=logout;
 }
 window.addEventListener('hashchange',()=>{
   if(isVideoConferenceHash()){

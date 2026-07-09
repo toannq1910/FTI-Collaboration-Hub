@@ -253,6 +253,10 @@ function ensureApiStyle(){
 async function openApiCenter(){
   ensureApiStyle();
   const hash = location.hash || '';
+  if(hash === '#api-center'){
+    location.replace('#api-reference');
+    return;
+  }
   if(hash !== '#api-center') return;
 
   const root = document.querySelector('#pageRoot');
@@ -281,7 +285,7 @@ function injectEnterpriseLink(){
       const title = card.querySelector('h3')?.textContent || '';
       if(title === 'API Center'){
         const a = card.querySelector('a');
-        if(a) a.href = '#api-center';
+        if(a) a.href = '#api-reference';
       }
     });
   }, 800);

@@ -63,13 +63,13 @@ const FALLBACK_DOCS = [
     type:'apiSpec',
     product:'OnCallCX',
     category:'API',
-    sidebar:'#api-center',
+    sidebar:'#api-reference',
     version:'v1.0',
     owner:'Solution Architect',
     status:'ready',
     tags:['API','Webhook','CDR'],
     description:'Tài liệu API/Webhook phục vụ tích hợp CRM/ERP và hệ thống nghiệp vụ.',
-    route:'#api-center'
+    route:'#api-reference'
   },
   {
     id:'doc-oncallcx-demo-script',
@@ -200,13 +200,13 @@ function normalizeDocs(cms, assets){
         type:'apiSpec',
         product: product.title || product.id || 'Product',
         category:'API',
-        sidebar:'#api-center',
+        sidebar:'#api-reference',
         version:'cms',
         owner:'Knowledge Graph',
         status:'ready',
         tags:['API', api.method || 'GET', product.title || product.id || 'Product'],
         description: api.description || '',
-        route:'#api-center'
+        route:'#api-reference'
       });
     });
   });
@@ -297,7 +297,7 @@ function renderDocumentCenter(docs){
       <div><b>Product</b><span>OnCallCX / CCaaS / UCaaS</span></div>
       <div><b>Type</b><span>Presentation / HLD / SOW / API</span></div>
       <div><b>Category</b><span>Product / Demo / Compliance</span></div>
-      <div><b>Sidebar</b><span>#crm / #api-center / #video</span></div>
+      <div><b>Sidebar</b><span>#crm / #api-reference / #video</span></div>
       <div><b>Search Index</b><span>Tags / Summary / Owner</span></div>
     </div>
   </section>

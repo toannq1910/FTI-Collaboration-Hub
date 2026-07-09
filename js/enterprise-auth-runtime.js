@@ -134,8 +134,22 @@ function readAudit() {
 }
 
 function writeAudit(items) {
-  localStorage.setItem(AUDIT_KEY, JSON.stringify(items.slice(-500)));
-  syncAuditToCms(items.slice(-500)).catch(()=>{});
+  const compact = items.slice(-120).map(item => ({
+    id: item.id,
+    at: item.at,
+    actor: item.actor,
+    role: item.role,
+    action: item.action,
+    detail: item.detail ? JSON.stringify(item.detail).slice(0, 600) : ''
+  }));
+  try {
+    localStorage.setItem(AUDIT_KEY, JSON.stringify(compact));
+  } catch {
+    const tiny = compact.slice(-40).map(({detail, ...item}) => item);
+    try { localStorage.setItem(AUDIT_KEY, JSON.stringify(tiny)); }
+    catch { try { localStorage.removeItem(AUDIT_KEY); } catch {} }
+  }
+  syncAuditToCms(compact).catch(()=>{});
 }
 
 function addAudit(action, detail = {}) {
@@ -326,6 +340,11 @@ function isSessionValid() {
   return true;
 }
 
+function markAppReady() {
+  document.body.classList.add('auth-ui-ready', 'app-ready');
+  document.body.classList.remove('app-booting');
+}
+
 function updateAuthUi() {
   const user = currentUser();
   const chip = document.querySelector('#permissionChip');
@@ -333,8 +352,9 @@ function updateAuthUi() {
     chip.classList.toggle('login-on', !!user);
     chip.classList.toggle('login-off', !user);
     const groupLabel = user?.groups?.length ? user.groups.map(g => g.name).join(', ') : (ROLE_PERMISSIONS[user?.role]?.label || user?.role || '');
-    chip.textContent = user ? `Login: ON · ${user.username} · ${groupLabel}` : 'Login: OFF';
+    chip.textContent = user ? `Login: ON · ${user.username} · ${groupLabel}` : 'Login';
   }
+  markAppReady();
   const footerName = document.querySelector('.user-pill strong');
   const footerRole = document.querySelector('.user-pill span');
   if (footerName) footerName.textContent = user ? (user.displayName || user.username) : 'Guest';
@@ -952,6 +972,7 @@ window.FTIAuth = {
         });
       }
     }
+    markAppReady();
 
     const footerName=document.querySelector('.user-pill strong');
     const footerRole=document.querySelector('.user-pill span');

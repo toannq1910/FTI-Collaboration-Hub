@@ -71,7 +71,7 @@ const ARTICLE_SYNC_SEEDS = [
     cards:[
       {title:'OnCallCX CCaaS', summary:ONCALLCX_CCAAS_SUMMARY, url:'#oncallcx-product-center:prod-oncallcx-fpt'},
       {title:'OnCallCX UCaaS', summary:'OnCallCX UCaaS tập trung vào tổng đài Cloud PBX, extension, SIP trunk, call routing và tích hợp CRM/API cho doanh nghiệp.', url:'#oncallcx-product-center:prod-oncallcx-ucaas-inherited'},
-      {title:'API Reference', summary:'API/Webhook, CDR, Recording và tích hợp CRM/ERP.', url:'#api-reference'}
+      {title:'API Reference', summary:'REST API, CTI API và Webhook OnCallCX UCaaS.', url:'#api-reference'}
     ]
   },
   {
@@ -114,7 +114,7 @@ const ARTICLE_SYNC_SEEDS = [
   },
   {id:'article-ccaas-vietnam', title:'CCaaS Việt Nam', sidebarId:'ccaas-vn', route:'#ccaas-vn', type:'category-article', status:'active', module:'CONTACT CENTER', summary:'Bài viết nhóm các nhà cung cấp CCaaS nội địa, phù hợp khách hàng cần hỗ trợ tiếng Việt, SIP trunk trong nước, dữ liệu tại Việt Nam và tích hợp CRM nội địa.'},
   {id:'article-ccaas-international', title:'CCaaS Global', sidebarId:'ccaas-global', route:'#ccaas-global', type:'category-article', status:'active', module:'CONTACT CENTER', summary:'Bài viết nhóm các nền tảng CCaaS quốc tế để tham khảo, so sánh và tư vấn khách hàng enterprise/global.'},
-  {id:'article-api-reference', title:'API Reference', sidebarId:'api-reference', route:'#api-reference', type:'api-reference', status:'active', module:'CONTACT CENTER', summary:'Thư mục chứa các bài viết API, webhook, CDR, recording và integration spec đã được gom về một nơi.'},
+  {id:'article-api-reference', title:'API Reference', sidebarId:'api-reference', route:'#api-reference', type:'api-reference', status:'active', module:'CONTACT CENTER', summary:'Bộ tài liệu API OnCallCX UCaaS gồm REST API, CTI API/CSTA/anCTI và Webhook realtime. Nội dung được trích từ file tài liệu gốc và chỉ tự kiểm thử các API đọc dữ liệu an toàn.'},
   {id:'article-uc-pbx-vietnam', title:'UC/PBX Việt Nam', sidebarId:'ucpbx-vn', route:'#ucpbx-vn', type:'category-article', status:'active', module:'CONTACT CENTER', summary:'Nhóm nhà cung cấp UC/PBX/SIP có thể tích hợp với Contact Center qua SIP trunk, SBC, API, CTI hoặc BYOC.'},
   {id:'article-video', title:'Tổng quan Video Conference', sidebarId:'video-conferencing', route:'#video-conferencing', type:'category-article', status:'active', module:'VIDEO CONFERENCE', summary:'Tổng quan danh mục giải pháp Video Conference theo brand catalog, product detail, room recommendation, feature comparison và presales battle card.'},
   {id:'article-vc-yealink', title:'Yealink Meeting Bar', sidebarId:'vc-yealink', route:'#vc-yealink', type:'product-article', status:'active', module:'GLOBAL BRANDS', summary:'Yealink MeetingBar A40, all-in-one Android video bar, AI camera và Teams/Zoom/Meet certified.'},

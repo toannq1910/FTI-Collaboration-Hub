@@ -49,7 +49,7 @@ const ARTICLE_SEEDS = [
     productRefs: ['oncallcx'],
     cards: [
       {title:'Product Center', summary:'Thông tin tổng quan, presentation, datasheet, demo và tài liệu sản phẩm.', url:'#product-detail:oncallcx'},
-      {title:'API Reference', summary:'CDR API, Outbound Call API, Webhook Incoming và Recording API.', url:'#api-center'},
+      {title:'API Reference', summary:'REST API, CTI API và Webhook OnCallCX UCaaS.', url:'#api-reference'},
       {title:'Document Center', summary:'Presentation, datasheet, demo script, SOW template và checklist.', url:'#document-center'},
       {title:'AI Assistant', summary:'Trợ lý nội bộ đọc CMS data để hỗ trợ tư vấn Presales.', url:'#ai-assistant'}
     ]
@@ -96,13 +96,13 @@ const ARTICLE_SEEDS = [
     type: 'api-reference',
     status: 'active',
     module: 'Contact Center',
-    summary: 'Khu vực API Reference chuẩn hóa theo product, method, endpoint, auth, request, response, notes và API Spec asset.',
+    summary: 'Bộ tài liệu API OnCallCX UCaaS gồm REST API, CTI API/CSTA/anCTI và Webhook realtime. Nội dung được trích từ file tài liệu gốc và chỉ tự kiểm thử các API đọc dữ liệu an toàn.',
     tags: ['api','reference','webhook','integration'],
     cards: [
-      {title:'API Center', summary:'Structured API Reference với search, filter, request/response và copy endpoint.', url:'#api-center'},
-      {title:'CDR API', summary:'Truy vấn lịch sử cuộc gọi, trạng thái, thời lượng và metadata.', url:'#api-center'},
-      {title:'Webhook Incoming', summary:'Nhận sự kiện cuộc gọi realtime để tích hợp CRM/ERP.', url:'#api-center'},
-      {title:'Recording API', summary:'Truy xuất ghi âm phục vụ QA/QC và tra soát.', url:'#api-center'}
+      {title:'REST API OnCallCX UCaaS', summary:'Quản trị PBX, extension/address, terminal, CDR, contacts, forwards, audioFiles và các object tích hợp qua REST.', url:'#api-reference'},
+      {title:'CTI API / anCTI', summary:'Call control, device monitoring, CSTA services/events, ctiDomain, ctiUrl và ctiDeviceId cho webphone/click-to-call.', url:'#api-reference'},
+      {title:'Webhook Events', summary:'Cấu hình webhook và payload call_start, cdr_target_*, call_cdr, extension_status để đồng bộ CRM/ERP realtime.', url:'#api-reference'},
+      {title:'API Spec Files', summary:'Tài liệu gốc REST, CTI và Webhook đã được đưa vào Asset Manager dưới loại API Spec.', url:'#cms'}
     ]
   },
   {
@@ -135,7 +135,7 @@ const ARTICLE_SEEDS = [
     cards: [
       {title:'CRM Screen Pop', summary:'Bật màn hình thông tin khách hàng khi có cuộc gọi vào.', url:'#crm'},
       {title:'ERP Customer Sync', summary:'Đồng bộ hồ sơ khách hàng, ticket, đơn hàng hoặc mã khách hàng.', url:'#integration'},
-      {title:'Webhook Events', summary:'Nhận sự kiện realtime để kích hoạt workflow.', url:'#api-center'},
+      {title:'Webhook Events', summary:'Nhận sự kiện realtime để kích hoạt workflow.', url:'#api-reference'},
       {title:'SIP / SBC Integration', summary:'Kết nối SIP trunk, SBC, PBX hoặc BYOC.', url:'#ucpbx-vn'}
     ]
   },
@@ -169,7 +169,7 @@ const ARTICLE_SEEDS = [
     cards: [
       {title:'Data Protection', summary:'Kiểm soát dữ liệu cá nhân, mục đích xử lý, lưu trữ và quyền truy cập.', url:'#compliance'},
       {title:'Recording Policy', summary:'Thông báo ghi âm, lưu trữ an toàn và khả năng tra soát.', url:'#compliance'},
-      {title:'API Security', summary:'Token, signature, rate limit, audit log và quyền truy cập API.', url:'#api-center'},
+      {title:'API Security', summary:'Token, signature, rate limit, audit log và quyền truy cập API.', url:'#api-reference'},
       {title:'Compliance Checklist', summary:'Checklist tuân thủ cho dự án Contact Center.', url:'#document-center'}
     ]
   },
@@ -353,16 +353,16 @@ const ARTICLE_SEEDS = [
     id: 'article-api-center',
     title: 'API Center',
     sidebarId: 'api-center',
-    route: '#api-center',
+    route: '#api-reference',
     type: 'cms-module',
     status: 'active',
     module: 'Enterprise CMS',
     summary: 'Structured API Reference với search/filter, product grouping, method, endpoint, auth, request/response và copy endpoint.',
     tags: ['api-center','endpoint','request','response'],
     cards: [
-      {title:'Search API', summary:'Tìm API theo name, endpoint, product và description.', url:'#api-center'},
-      {title:'Filter Method', summary:'Lọc theo GET, POST, PUT, PATCH, DELETE.', url:'#api-center'},
-      {title:'Detail Panel', summary:'Xem request/response và notes.', url:'#api-center'},
+      {title:'Search API', summary:'Tìm API theo name, endpoint, product và description.', url:'#api-reference'},
+      {title:'Filter Method', summary:'Lọc theo GET, POST, PUT, PATCH, DELETE.', url:'#api-reference'},
+      {title:'Detail Panel', summary:'Xem request/response và notes.', url:'#api-reference'},
       {title:'CMS API Data', summary:'Đọc product.apiLinks từ CMS data.', url:'#cms'}
     ]
   },
@@ -639,7 +639,7 @@ async function runSync(force = false) {
   data.cmsModules = mergeById(Array.isArray(data.cmsModules) ? data.cmsModules : [], [
     {id:'module-video-conference', title:'Video Conference CMS', route:'#video-conferencing', status:'active', collection:'articles/products', description:'Brand, product, room, feature, battle card and CMS relationship data.'},
     {id:'module-enterprise-cms', title:'Enterprise CMS', route:'#enterprise-cms', status:'active', collection:'articles/products/assets', description:'Enterprise knowledge platform CMS modules.'},
-    {id:'module-api-center', title:'API Center', route:'#api-center', status:'active', collection:'products.apiLinks', description:'Structured API catalog.'},
+    {id:'module-api-center', title:'API Center', route:'#api-reference', status:'active', collection:'products.apiLinks', description:'Structured API catalog.'},
     {id:'module-document-center', title:'Document Center', route:'#document-center', status:'active', collection:'documents/assets', description:'Document metadata and asset relationship.'}
   ]);
 
@@ -650,7 +650,7 @@ async function runSync(force = false) {
       '#video-conferencing','#vc-yealink','#vc-logitech','#vc-poly','#vc-cisco','#vc-jabra','#vc-crestron','#vc-huddle-room','#vc-medium-large-room'
     ],
     enterpriseRoutes: [
-      '#enterprise-cms','#api-center','#document-center','#global-search','#asset-manager-2','#relationship-graph','#knowledge-base','#ai-assistant'
+      '#enterprise-cms','#api-reference','#document-center','#global-search','#asset-manager-2','#relationship-graph','#knowledge-base','#ai-assistant'
     ]
   };
 

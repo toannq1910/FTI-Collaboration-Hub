@@ -23,7 +23,7 @@ export function assetAccept(t){
   if(t === 'userGuide' || t === 'datasheet' || t === 'caseStudy') return 'application/pdf,.pdf';
   if(t === 'video') return 'video/mp4,video/webm,.mp4,.webm';
   if(t === 'image' || t === 'logo') return 'image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp';
-  if(t === 'api') return 'application/json,.json,.yaml,.yml';
+  if(t === 'api') return 'application/pdf,.pdf,application/json,.json,.yaml,.yml,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.docx';
   return 'application/pdf,.pdf';
 }
 
@@ -272,6 +272,48 @@ const OFFICIAL_ASSETS = [
     size: 5050550,
     createdAt: '2026-07-01T00:00:01.000Z',
     url: 'assets/user-guide/oncallcx/OnCallCX-UserGuide-Inbound-2025.pdf',
+    official: true
+  },
+  {
+    id: 'official-oncallcx-ucaas-rest-api',
+    replacementSlot: 'oncallcx-ucaas-rest-api',
+    product: 'prod-oncallcx-ucaas-inherited',
+    type: 'api',
+    title: 'REST API OnCallCX UCaaS',
+    description: 'Tài liệu REST API cho OnCallCX UCaaS: orgUnits, addresses, terminals, CDR, contacts, forwards, audioFiles và các object tích hợp.',
+    fileName: 'REST-API-OnCallCX-UCaaS.pdf',
+    mimeType: 'application/pdf',
+    size: 2650522,
+    createdAt: '2026-07-07T00:00:00.000Z',
+    url: 'assets/api/oncallcx/REST-API-OnCallCX-UCaaS.pdf',
+    official: true
+  },
+  {
+    id: 'official-oncallcx-ucaas-cti-api',
+    replacementSlot: 'oncallcx-ucaas-cti-api',
+    product: 'prod-oncallcx-ucaas-inherited',
+    type: 'api',
+    title: 'CTI API OnCallCX UCaaS',
+    description: 'Tài liệu CTI API/CSTA/anCTI cho OnCallCX UCaaS: call control, device monitoring, events và cấu hình ctiDomain/ctiDeviceId.',
+    fileName: 'CTI-API-OnCallCX-UCaaS.pdf',
+    mimeType: 'application/pdf',
+    size: 3192553,
+    createdAt: '2026-07-07T00:00:01.000Z',
+    url: 'assets/api/oncallcx/CTI-API-OnCallCX-UCaaS.pdf',
+    official: true
+  },
+  {
+    id: 'official-oncallcx-ucaas-webhook',
+    replacementSlot: 'oncallcx-ucaas-webhook',
+    product: 'prod-oncallcx-ucaas-inherited',
+    type: 'api',
+    title: 'Webhook OnCallCX UCaaS',
+    description: 'Tài liệu cấu hình Webhook OnCallCX UCaaS và event payload: call_start, call_cdr, cdr_target_* và extension_status.',
+    fileName: 'Webhook-OnCallCX-UCaaS.pdf',
+    mimeType: 'application/pdf',
+    size: 448327,
+    createdAt: '2026-07-07T00:00:02.000Z',
+    url: 'assets/api/oncallcx/Webhook-OnCallCX-UCaaS.pdf',
     official: true
   }
 ];

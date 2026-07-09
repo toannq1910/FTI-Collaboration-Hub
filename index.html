@@ -27,6 +27,12 @@ html,body{height:100%;overflow:hidden!important}
 .page-root{height:calc(100vh - 64px);overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:rgba(148,163,184,.5) transparent}
 .page-root::-webkit-scrollbar{width:8px;height:0}.page-root::-webkit-scrollbar-thumb{background:rgba(148,163,184,.45);border-radius:999px}
 .auth-hint{font-size:12px;color:#93a4bd;margin:10px 0 0}
+body.app-booting{background:#050a18}
+body.app-booting .app-shell{opacity:0;visibility:hidden;pointer-events:none}
+body.app-booting::before{content:"";position:fixed;inset:0;z-index:9998;background:#050a18}
+body.app-booting::after{content:"";position:fixed;left:50%;top:50%;z-index:9999;width:34px;height:34px;margin:-17px 0 0 -17px;border:3px solid rgba(59,130,246,.22);border-top-color:#60a5fa;border-radius:999px;animation:ftiBootSpin .8s linear infinite}
+@keyframes ftiBootSpin{to{transform:rotate(360deg)}}
+body:not(.auth-ui-ready) #permissionChip{visibility:hidden}
 .permission-chip.login-on{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.35);color:#86efac}
 .permission-chip.login-off{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35);color:#fca5a5}
 .auth-denied{opacity:.45;pointer-events:none;filter:grayscale(.4)}
@@ -87,7 +93,7 @@ body:not(.cms-locked) .auth-system-group{display:block!important}
 </style>
 
 </head>
-<body>
+<body class="app-booting">
 <div id="loginOverlay" class="login-overlay" hidden>
   <form class="login-card" id="loginForm">
     <img src="assets/logo-fpt.png" class="login-logo" alt="FPT"><span class="eyebrow">Enterprise Authentication</span>
@@ -147,9 +153,10 @@ body:not(.cms-locked) .auth-system-group{display:block!important}
 </main></div>
 <div id="toastRoot" class="toast-root"></div>
 <script type="module" src="js/main.js?v=20260707-1"></script>
-<script type="module" src="js/cms-portal.js?v=20260707-1"></script>
+<script type="module" src="js/cms-portal.js?v=20260708-1"></script>
 <script type="module" src="js/product-detail.js?v=20260707-1"></script>
 <script type="module" src="js/sidebar-alignment.js?v=20260707-1"></script>
+<script type="module" src="js/sidebar-icon-runtime.js?v=20260708-1"></script>
 <script type="module" src="js/enterprise-cms-runtime.js?v=20260707-1"></script>
 <script type="module" src="js/api-center-runtime.js?v=20260707-1"></script>
 <script type="module" src="js/document-center-runtime.js?v=20260707-1"></script>
@@ -162,5 +169,5 @@ body:not(.cms-locked) .auth-system-group{display:block!important}
 <script type="module" src="js/cms-full-content-sync.js?v=20260707-1"></script>
 <script type="module" src="js/enterprise-auth-runtime.js?v=20260707-1"></script>
 <script type="module" src="js/oncallcx-user-guide-runtime.js?v=20260707-1"></script>
-<script type="module" src="js/oncallcx-ucaas-api-reference-runtime.js?v=20260707-1"></script>
+<script type="module" src="js/oncallcx-ucaas-api-reference-runtime.js?v=20260707-2"></script>
 </body></html>
