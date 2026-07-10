@@ -1,6 +1,7 @@
 /* v10.8.2 Unified CMS App */
 import { $, $$, loadCms, toast } from './cms-core.js';
 import { downloadJson } from './cms-io.js';
+import { publishJsonToGithub } from './github-publish.js';
 import { renderPreview } from './cms-preview.js';
 import { renderBackupPanel, bindBackupPanel } from './cms-backup.js';
 import { renderAssetManager, bindAssetManager } from './cms-assets.js?v=20260701-6';
@@ -44,6 +45,7 @@ export function renderCms(data, activeTab = 'preview'){
     </div>
     <div class="cms-actions">
       <button class="btn btn-soft" id="cmsExport">Export JSON</button>
+      <button class="btn btn-primary" id="cmsPublishGithub">Publish GitHub</button>
     </div>
   </section>
 
@@ -79,6 +81,19 @@ function bindCms(){
   if(exportBtn){
     exportBtn.onclick = () => {
       downloadJson(currentCms);
+    };
+  }
+
+  const publishBtn = $('#cmsPublishGithub');
+  if(publishBtn){
+    publishBtn.onclick = () => {
+      publishJsonToGithub({
+        data: currentCms,
+        path: 'data/cms-content.json',
+        message: 'Publish CMS content',
+        title: 'Publish CMS Data',
+        description: 'Ghi CMS Articles, Product Data, API/Knowledge va cac cau hinh trong CMS vao data/cms-content.json tren GitHub.'
+      });
     };
   }
 

@@ -1,8 +1,10 @@
 /* v9.7.0 Product Asset Binding */
 import { $, $$, esc, toast, loadCms } from './cms-core.js';
+import { publishFilesToGithub, defaultAssetPath } from './github-publish.js';
 
 const DB = 'fti_unified_asset_manager_v1';
 const STORE = 'assets';
+const ASSET_MANIFEST_URL = 'data/assets.json';
 
 export const ASSET_TYPES = {
   presentation:'Presentation',
@@ -170,6 +172,7 @@ export async function assetDelete(id){
 }
 
 export async function allAssets(){
+  await loadPublishedAssets();
   try{
     const db = await openDb();
     return new Promise((resolve,reject)=>{
@@ -214,6 +217,8 @@ const ASSET_PRODUCT_SHORTCUTS = [
 
 let assetProductLabels = new Map(ASSET_PRODUCT_SHORTCUTS.map(p => [p.id, p.title]));
 let assetModalEscapeBound = false;
+let publishedAssets = [];
+let publishedAssetsLoaded = false;
 
 const OFFICIAL_ASSETS = [
   {
@@ -318,6 +323,61 @@ const OFFICIAL_ASSETS = [
   }
 ];
 
+async function loadPublishedAssets(){
+  if(publishedAssetsLoaded) return publishedAssets;
+  publishedAssetsLoaded = true;
+  try{
+    const res = await fetch(`${ASSET_MANIFEST_URL}?v=${Date.now()}`, {cache:'no-store'});
+    if(!res.ok) return publishedAssets;
+    const json = await res.json();
+    publishedAssets = Array.isArray(json.assets) ? json.assets.map(asset => ({
+      ...asset,
+      published: true
+    })) : [];
+  }catch(err){
+    console.warn('Cannot load published asset manifest', err);
+  }
+  return publishedAssets;
+}
+
+function assetManifestRecord(record, url){
+  const copy = {
+    id: record.id,
+    replacementSlot: record.replacementSlot || '',
+    replacesOfficialAssetId: record.replacesOfficialAssetId || '',
+    product: record.product || 'oncallcx',
+    type: record.type || 'other',
+    title: record.title || record.fileName || 'Asset',
+    description: record.description || '',
+    fileName: record.fileName || record.title || 'asset',
+    mimeType: record.mimeType || 'application/octet-stream',
+    size: record.size || 0,
+    createdAt: record.createdAt || new Date().toISOString(),
+    url,
+    thumbnail: record.thumbnail || '',
+    pageCount: record.pageCount || 0,
+    published: true
+  };
+  return copy;
+}
+
+function upsertPublishedAsset(record){
+  const next = publishedAssets.filter(asset => asset.id !== record.id);
+  if(record.replacementSlot){
+    for(let i = next.length - 1; i >= 0; i--){
+      if(next[i].replacementSlot === record.replacementSlot) next.splice(i, 1);
+    }
+  }
+  next.unshift(record);
+  publishedAssets = next;
+  publishedAssetsLoaded = true;
+  return {
+    version: new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14),
+    updatedAt: new Date().toISOString(),
+    assets: next
+  };
+}
+
 function mergeOfficialAssets(records = []){
   const map = new Map();
   const replacedOfficialIds = new Set(records.map(asset => asset.replacesOfficialAssetId).filter(Boolean));
@@ -325,6 +385,15 @@ function mergeOfficialAssets(records = []){
   OFFICIAL_ASSETS.forEach(asset => {
     if(replacedOfficialIds.has(asset.id)) return;
     if(asset.replacementSlot && replacedSlots.has(asset.replacementSlot)) return;
+    map.set(asset.id, asset);
+  });
+  publishedAssets.forEach(asset => {
+    if(asset.replacesOfficialAssetId) map.delete(asset.replacesOfficialAssetId);
+    if(asset.replacementSlot){
+      Array.from(map.values()).forEach(existing => {
+        if(existing.replacementSlot === asset.replacementSlot) map.delete(existing.id);
+      });
+    }
     map.set(asset.id, asset);
   });
   records.forEach(asset => map.set(asset.id, asset));
@@ -462,6 +531,7 @@ export async function renderAssetList(){
     </div>
     <div class="asset-actions asset-card-actions">
       <button class="btn btn-soft" data-asset-view="${a.id}">Xem</button>
+      ${a.blob ? `<button class="btn btn-primary" data-asset-publish="${a.id}">Publish</button>` : ''}
       <button class="btn btn-soft" data-asset-download="${a.id}">Tải</button>
       ${a.official ? `<button class="btn btn-soft" data-asset-replace="${a.id}">Thay thế</button>` : `<button class="btn btn-danger" data-asset-delete="${a.id}">Xóa</button>`}
     </div>
@@ -573,6 +643,30 @@ function bindAssetActions(){
     await assetDelete(btn.dataset.assetDelete);
     toast('Đã xóa asset.');
     renderAssetList();
+  });
+
+  $$('[data-asset-publish]').forEach(btn => btn.onclick = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const rec = await assetGet(btn.dataset.assetPublish);
+    if(!rec?.blob){
+      toast('Asset nay khong co file local de publish.');
+      return;
+    }
+    const assetPath = defaultAssetPath(rec);
+    const manifestRecord = assetManifestRecord(rec, assetPath);
+    const previousPublishedAssets = publishedAssets.slice();
+    const manifest = upsertPublishedAsset(manifestRecord);
+    const result = await publishFilesToGithub({
+      files: [
+        {path: assetPath, blob: rec.blob},
+        {path: 'data/assets.json', text: JSON.stringify(manifest, null, 2) + '\n'}
+      ],
+      message: `Publish asset ${rec.fileName || rec.title || rec.id}`,
+      title: 'Publish Asset + Manifest',
+      description: 'Upload file asset va cap nhat data/assets.json de GitHub Pages va cac trinh duyet khac hien thi dung file nay.'
+    });
+    if(!result) publishedAssets = previousPublishedAssets;
   });
 
   $$('[data-asset-replace]').forEach(btn => btn.onclick = async (event) => {

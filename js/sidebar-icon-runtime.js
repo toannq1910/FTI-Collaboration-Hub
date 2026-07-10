@@ -1,10 +1,12 @@
 /* Sidebar icon manager - upload, preview, export config for GitHub Pages */
+import { publishJsonToGithub } from './cms/github-publish.js';
+
 (function(){
   const STORAGE_KEY = 'fti_sidebar_icon_config_v1';
   const DB_NAME = 'fti_sidebar_icon_db';
   const DB_STORE = 'configs';
   const DB_KEY = 'sidebar-icons';
-  const CONFIG_URL = 'data/sidebar-icons.json?v=20260708-1';
+  const CONFIG_URL = 'data/sidebar-icons.json';
 
   const targets = [
     {id:'overview', type:'Bài viết', label:'Tổng quan', route:'#overview', page:'overview', fallback:'🏠'},
@@ -176,7 +178,7 @@
 
   async function loadRemoteConfig(){
     try{
-      const res = await fetch(CONFIG_URL, {cache:'no-store'});
+      const res = await fetch(`${CONFIG_URL}?v=${Date.now()}`, {cache:'no-store'});
       if(res.ok){
         const json = await res.json();
         remoteConfig = json && typeof json === 'object' ? json : {icons:{}};
@@ -255,6 +257,21 @@
     applyIcons();
     renderManager();
     toast('Đã lưu cấu hình icon sidebar.');
+  }
+
+  function publishIcons(){
+    const config = mergedConfig();
+    publishJsonToGithub({
+      data: {
+        version: new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14),
+        updatedAt: new Date().toISOString(),
+        icons: config.icons || {}
+      },
+      path: 'data/sidebar-icons.json',
+      message: 'Publish sidebar icon config',
+      title: 'Publish Sidebar Icons',
+      description: 'Ghi cau hinh icon sidebar vao data/sidebar-icons.json de GitHub Pages va moi trinh duyet doc dung icon da upload.'
+    });
   }
 
   async function importConfig(file){
@@ -355,6 +372,7 @@
           <option value="Bài viết" ${type === 'Bài viết' ? 'selected' : ''}>Bài viết</option>
         </select>
         <button class="btn btn-primary" id="sidebarIconSaveBtn">Lưu cấu hình</button>
+        <button class="btn btn-primary" id="sidebarIconPublishBtn">Publish Icons</button>
         <button class="btn btn-soft" id="sidebarIconImportBtn">Import JSON</button>
         <button class="btn btn-soft" id="sidebarIconExportBtn">Export JSON</button>
         <button class="btn btn-ghost" id="sidebarIconResetAllBtn">Reset tất cả</button>
@@ -375,6 +393,7 @@
       renderManager();
     });
     $('#sidebarIconSaveBtn')?.addEventListener('click', saveConfig);
+    $('#sidebarIconPublishBtn')?.addEventListener('click', publishIcons);
     $('#sidebarIconExportBtn')?.addEventListener('click', exportConfig);
     $('#sidebarIconResetAllBtn')?.addEventListener('click', resetAll);
     $('#sidebarIconImportBtn')?.addEventListener('click', () => $('#sidebarIconImportFile')?.click());
@@ -403,6 +422,7 @@
     exportConfig,
     saveConfig,
     importConfig,
+    publishIcons,
     resetIcon,
     resetAll
   };
