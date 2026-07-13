@@ -1142,7 +1142,7 @@ function renderHero(){
 }
 function solutionCard(input){
   const i=input?.id?getContentItem(input.id):input;
-  return `<article class="solution-card" data-solution="${safeHtml(i.id)}"><div class="solution-top"><div class="solution-icon">${safeHtml(i.icon)}</div><div><h3>${safeHtml(i.title)}</h3><small>${safeHtml(i.type)}</small></div></div><div class="solution-body"><p>${safeHtml(i.desc)}</p><div class="chips">${(i.chips||[]).map((c,n)=>`<span class="chip ${n%3===0?'orange':n%3===1?'green':'blue'}">${safeHtml(c)}</span>`).join('')}</div><div class="api-list">${(i.apis||[]).map(apiEndpointRow).join('')}</div></div></article>`;
+  return `<article class="solution-card" data-solution="${safeHtml(i.id)}"><div class="solution-top"><div class="solution-icon" data-icon-target="${safeHtml(i.id || cardIconTarget('', i.title || ''))}">${safeHtml(i.icon)}</div><div><h3>${safeHtml(i.title)}</h3><small>${safeHtml(i.type)}</small></div></div><div class="solution-body"><p>${safeHtml(i.desc)}</p><div class="chips">${(i.chips||[]).map((c,n)=>`<span class="chip ${n%3===0?'orange':n%3===1?'green':'blue'}">${safeHtml(c)}</span>`).join('')}</div><div class="api-list">${(i.apis||[]).map(apiEndpointRow).join('')}</div></div></article>`;
 }
 function renderSolutions(filter){
   const legacySource=allContentItems();
@@ -1159,7 +1159,7 @@ function productArticleCard(v,groupKey='',presentationMode=false,routeOverride='
   const routeAction=actionRoute&&!actionRoute.startsWith('#product-detail:');
   return `<article class="partner-card">
     <div class="partner-head">
-      <div class="partner-icon">${safeHtml(v.icon)}</div>
+      <div class="partner-icon" data-icon-target="${safeHtml(v.id || '')}">${safeHtml(v.icon)}</div>
       <div>
         <h3>${safeHtml(v.name)}</h3>
         <small>${safeHtml(v.category||'Product')}</small>
@@ -1211,7 +1211,7 @@ function apiEndpointRow(a){
 }
 function apiArticleCard(v,groupKey=''){
   return `<article class="api-doc-card">
-    <header><div class="vendor-icon">${safeHtml(v.icon)}</div><div><h3>${safeHtml(v.name)}</h3><small>${safeHtml(v.category)}</small></div></header>
+    <header><div class="vendor-icon" data-icon-target="${safeHtml(v.id || cardIconTarget('', v.name || ''))}">${safeHtml(v.icon)}</div><div><h3>${safeHtml(v.name)}</h3><small>${safeHtml(v.category)}</small></div></header>
     <p class="api-article-desc">${safeHtml(v.desc)}</p>
     <div class="chips">${(v.tags||[]).map((t,i)=>`<span class="chip ${i%3===0?'green':i%3===1?'blue':'orange'}">${safeHtml(t)}</span>`).join('')}</div>
     <h4>Endpoints / API notes</h4>
@@ -1344,6 +1344,12 @@ function textSlug(value=''){
     .replace(/[^a-z0-9]+/g,'-')
     .replace(/^-+|-+$/g,'');
 }
+function cardIconTarget(route='',title='',id=''){
+  if(id)return String(id);
+  const raw=String(route||'').trim();
+  if(raw.startsWith('#'))return `card-${textSlug(raw.replace(/^#/,'').replace(/[:/]+/g,'-'))}`;
+  return `card-${textSlug(title||raw||'card')}`;
+}
 function productsForCmsGroup(groupKey=''){
   const group=getProductGroup(groupKey);
   const products=[...(group.products||[])];
@@ -1379,9 +1385,10 @@ function cmsPartnerCard(card,groupKey='',presentationMode=false){
   const product=findProductForCmsCard(card,groupKey);
   if(product)return productArticleCard(product,groupKey,presentationMode,route);
   const title=card.title||'Untitled';
+  const iconTarget=cardIconTarget(route,title,card.id||'');
   return `<article class="partner-card cms-public-card">
     <div class="partner-head">
-      <div class="partner-icon">${safeHtml(card.icon||overviewIcon(route,title))}</div>
+      <div class="partner-icon" data-icon-target="${safeHtml(iconTarget)}">${safeHtml(card.icon||overviewIcon(route,title))}</div>
       <div><h3>${safeHtml(title)}</h3><small>${safeHtml(route||'CMS Articles')}</small></div>
     </div>
     <div class="partner-body"><p>${safeHtml(card.summary||'')}</p></div>
@@ -1391,8 +1398,9 @@ function cmsPartnerCard(card,groupKey='',presentationMode=false){
 function cmsApiCard(card){
   const route=normalizePublicRoute(card.url||card.route||'');
   const title=card.title||'Untitled';
+  const iconTarget=cardIconTarget(route,title,card.id||'');
   return `<article class="api-doc-card cms-public-card">
-    <header><div class="vendor-icon">${safeHtml(card.icon||overviewIcon(route,title))}</div><div><h3>${safeHtml(title)}</h3><small>${safeHtml(route||'CMS Articles')}</small></div></header>
+    <header><div class="vendor-icon" data-icon-target="${safeHtml(iconTarget)}">${safeHtml(card.icon||overviewIcon(route,title))}</div><div><h3>${safeHtml(title)}</h3><small>${safeHtml(route||'CMS Articles')}</small></div></header>
     <p class="api-article-desc">${safeHtml(card.summary||'')}</p>
     <div class="hero-actions"><button class="btn btn-primary" ${publicCardAttrs(route)}>Xem chi tiết</button></div>
   </article>`;
@@ -1400,8 +1408,9 @@ function cmsApiCard(card){
 function cmsSolutionCard(card){
   const route=normalizePublicRoute(card.url||card.route||'');
   const title=card.title||'Untitled';
+  const iconTarget=cardIconTarget(route,title,card.id||'');
   return `<article class="solution-card cms-public-card">
-    <div class="solution-top"><div class="solution-icon">${safeHtml(card.icon||overviewIcon(route,title))}</div><div><h3>${safeHtml(title)}</h3><small>${safeHtml(route||'CMS Articles')}</small></div></div>
+    <div class="solution-top"><div class="solution-icon" data-icon-target="${safeHtml(iconTarget)}">${safeHtml(card.icon||overviewIcon(route,title))}</div><div><h3>${safeHtml(title)}</h3><small>${safeHtml(route||'CMS Articles')}</small></div></div>
     <div class="solution-body"><p>${safeHtml(card.summary||'')}</p><div class="hero-actions"><button class="btn btn-primary" ${publicCardAttrs(route)}>Xem chi tiết</button></div></div>
   </article>`;
 }

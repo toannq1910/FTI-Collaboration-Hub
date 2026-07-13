@@ -39,15 +39,66 @@ import { publishJsonToGithub } from './cms/github-publish.js';
     {id:'users', type:'Bài viết', label:'Quản lý User', route:'#users', page:'users', fallback:'👤'},
     {id:'permissions', type:'Bài viết', label:'Phân quyền', route:'#permissions', page:'permissions', fallback:'🛡️'},
     {id:'audit-log', type:'Bài viết', label:'Audit Log', route:'#audit-log', page:'audit-log', fallback:'📜'},
-    {id:'sidebar-icons', type:'Bài viết', label:'Sidebar Icons', route:'#sidebar-icons', page:'sidebar-icons', fallback:'🖼️'}
+    {id:'sidebar-icons', type:'Bài viết', label:'Sidebar Icons', route:'#sidebar-icons', page:'sidebar-icons', fallback:'🖼️'},
+    {id:'prod-oncallcx-fpt', type:'Logo card', label:'OnCallCX CCaaS card logo', route:'#oncallcx-product-center-ccaas', fallback:'📞'},
+    {id:'prod-oncallcx-ucaas-inherited', type:'Logo card', label:'OnCallCX UCaaS card logo', route:'#oncallcx-product-center-ucaas', fallback:'🏢'}
   ];
 
   let remoteConfig = {icons:{}};
   let localConfig = {icons:{}};
+  let iconObserver = null;
+  let dynamicTargets = [];
+  let activeManagerRoot = null;
 
   const $ = (sel, root=document) => root.querySelector(sel);
   const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
   const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const slug = value => String(value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  function iconTargetFromRoute(route='', title=''){
+    const raw = String(route || '').trim();
+    if(raw.startsWith('#')) return `card-${slug(raw.replace(/^#/, '').replace(/[:/]+/g, '-'))}`;
+    return `card-${slug(title || raw || 'card')}`;
+  }
+
+  function addDynamicTarget(map, target){
+    if(!target?.id || map.has(target.id)) return;
+    map.set(target.id, {
+      type: 'Logo card',
+      fallback: '📄',
+      ...target
+    });
+  }
+
+  function domCardTargets(){
+    const map = new Map();
+    $$('[data-icon-target]').forEach(host => {
+      const id = host.getAttribute('data-icon-target');
+      if(!id) return;
+      const card = host.closest('article,.wp-card,.resource-card,.compliance-card') || host.parentElement;
+      const label = card?.querySelector('h3,h4,b,strong')?.textContent?.trim() || host.title || id;
+      addDynamicTarget(map, {id, label, route:id, fallback:host.textContent?.trim() || '📄'});
+    });
+    return Array.from(map.values());
+  }
+
+  function allTargets(){
+    const map = new Map();
+    [...targets, ...dynamicTargets, ...domCardTargets()].forEach(target => {
+      if(!target?.id) return;
+      if(map.has(target.id)){
+        map.set(target.id, {...target, ...map.get(target.id)});
+      }else{
+        map.set(target.id, target);
+      }
+    });
+    return Array.from(map.values());
+  }
 
   function toast(message){
     if(typeof window.toast === 'function') return window.toast(message);
@@ -132,6 +183,14 @@ import { publishJsonToGithub } from './cms/github-publish.js';
     try{ localStorage.removeItem(STORAGE_KEY); }catch{}
   }
 
+  function rerenderManager(){
+    if(activeManagerRoot && document.contains(activeManagerRoot)){
+      renderManager({root: activeManagerRoot});
+      return;
+    }
+    renderManager();
+  }
+
   function mergedConfig(){
     const local = readLocalConfig();
     return {
@@ -157,6 +216,15 @@ import { publishJsonToGithub } from './cms/github-publish.js';
     return null;
   }
 
+  function findCardIconHosts(target){
+    const aliases = {
+      'prod-oncallcx-fpt': ['prod-oncallcx-fpt', 'oncallcx'],
+      'prod-oncallcx-ucaas-inherited': ['prod-oncallcx-ucaas-inherited', 'oncallcx-ucaas', 'prod-oncallcx-uc', 'oncallcx-as7-ucaas']
+    };
+    return (aliases[target.id] || [target.id])
+      .flatMap(id => $$(`[data-icon-target="${CSS.escape(id)}"]`));
+  }
+
   function renderIconMarkup(icon, fallback, label){
     if(icon?.src){
       return `<img class="sidebar-custom-icon" src="${esc(icon.src)}" alt="${esc(label)}">`;
@@ -164,15 +232,21 @@ import { publishJsonToGithub } from './cms/github-publish.js';
     return esc(fallback || '•');
   }
 
+  function applyIconToHost(host, icon, fallback, label, mode){
+    host.classList.toggle('sidebar-icon-slot', mode === 'sidebar');
+    host.classList.toggle('product-logo-slot', mode === 'card');
+    const markup = renderIconMarkup(icon, fallback, label);
+    if(host.innerHTML !== markup) host.innerHTML = markup;
+    host.title = icon?.fileName ? `${label}: ${icon.fileName}` : label;
+  }
+
   function applyIcons(){
     const config = mergedConfig();
-    targets.forEach(target => {
-      const host = findIconHost(target);
-      if(!host) return;
+    allTargets().forEach(target => {
       const icon = config.icons[target.id];
-      host.classList.add('sidebar-icon-slot');
-      host.innerHTML = renderIconMarkup(icon, target.fallback, target.label);
-      host.title = icon?.fileName ? `${target.label}: ${icon.fileName}` : target.label;
+      const sidebarHost = findIconHost(target);
+      if(sidebarHost) applyIconToHost(sidebarHost, icon, target.fallback, target.label, 'sidebar');
+      findCardIconHosts(target).forEach(host => applyIconToHost(host, icon, target.fallback, target.label, 'card'));
     });
   }
 
@@ -187,6 +261,51 @@ import { publishJsonToGithub } from './cms/github-publish.js';
       remoteConfig = {icons:{}};
     }
     applyIcons();
+  }
+
+  async function fetchJson(url){
+    try{
+      const res = await fetch(`${url}?v=${Date.now()}`, {cache:'no-store'});
+      return res.ok ? await res.json() : null;
+    }catch{
+      return null;
+    }
+  }
+
+  async function loadDynamicTargets(){
+    const map = new Map();
+    const cms = await fetchJson('data/cms-content.json');
+    (cms?.products || []).forEach(product => {
+      addDynamicTarget(map, {
+        id: product.id,
+        label: product.title || product.name || product.id,
+        route: product.route || product.id,
+        fallback: product.icon || '📦'
+      });
+    });
+    (cms?.articles || []).forEach(article => {
+      (article.cards || []).forEach(card => {
+        const route = card.url || card.route || article.route || '';
+        addDynamicTarget(map, {
+          id: card.id || iconTargetFromRoute(route, card.title),
+          label: card.title || route || article.title || 'CMS card',
+          route,
+          fallback: card.icon || '📄'
+        });
+      });
+    });
+    const catalog = await fetchJson('data/partner-product-catalog.json');
+    Object.values(catalog || {}).forEach(group => {
+      (group.products || []).forEach(product => {
+        addDynamicTarget(map, {
+          id: product.id,
+          label: product.name || product.title || product.id,
+          route: product.link || product.id,
+          fallback: product.icon || '📦'
+        });
+      });
+    });
+    dynamicTargets = Array.from(map.values());
   }
 
   function fileToDataUrl(file){
@@ -216,7 +335,7 @@ import { publishJsonToGithub } from './cms/github-publish.js';
     };
     writeLocalConfig(local);
     applyIcons();
-    renderManager();
+    rerenderManager();
     toast('Đã đổi icon sidebar.');
   }
 
@@ -226,7 +345,7 @@ import { publishJsonToGithub } from './cms/github-publish.js';
     delete local.icons[targetId];
     writeLocalConfig(local);
     applyIcons();
-    renderManager();
+    rerenderManager();
     toast('Đã khôi phục icon mặc định.');
   }
 
@@ -234,7 +353,7 @@ import { publishJsonToGithub } from './cms/github-publish.js';
     if(!confirm('Khôi phục toàn bộ icon sidebar về mặc định?')) return;
     writeLocalConfig({icons:{}});
     applyIcons();
-    renderManager();
+    rerenderManager();
     toast('Đã khôi phục toàn bộ icon.');
   }
 
@@ -255,7 +374,7 @@ import { publishJsonToGithub } from './cms/github-publish.js';
     const config = mergedConfig();
     writeLocalConfig({icons: config.icons || {}});
     applyIcons();
-    renderManager();
+    rerenderManager();
     toast('Đã lưu cấu hình icon sidebar.');
   }
 
@@ -282,7 +401,7 @@ import { publishJsonToGithub } from './cms/github-publish.js';
       if(!json || typeof json !== 'object' || !json.icons) throw new Error('Invalid sidebar icon config');
       writeLocalConfig({icons: json.icons || {}});
       applyIcons();
-      renderManager();
+      rerenderManager();
       toast('Đã import cấu hình icon.');
     }catch(err){
       console.error(err);
@@ -297,6 +416,8 @@ import { publishJsonToGithub } from './cms/github-publish.js';
     style.textContent = `
       .sidebar-icon-slot{width:20px;min-width:20px;height:20px;display:inline-grid;place-items:center;line-height:1}
       .sidebar-custom-icon{width:20px;height:20px;object-fit:contain;border-radius:5px;display:block}
+      .product-logo-slot img{width:44px;height:44px;max-width:44px;max-height:44px;object-fit:contain;border-radius:12px;display:block}
+      .partner-icon.product-logo-slot,.vendor-icon.product-logo-slot,.solution-icon.product-logo-slot{font-size:0}
       .sidebar-icon-page{display:grid;gap:18px}
       .sidebar-icon-hero{background:linear-gradient(135deg,rgba(249,115,22,.16),rgba(16,185,129,.08));border:1px solid rgba(249,115,22,.28);border-radius:24px;padding:26px}
       .sidebar-icon-hero h2{font-size:32px;margin:10px 0}
@@ -337,7 +458,16 @@ import { publishJsonToGithub } from './cms/github-publish.js';
 
   function renderManager(options = {}){
     const embeddedRoot = options.root || null;
-    if(!embeddedRoot && location.hash !== '#sidebar-icons') return;
+    if(embeddedRoot){
+      activeManagerRoot = embeddedRoot;
+    }else if(location.hash === '#sidebar-icons'){
+      activeManagerRoot = null;
+    }else if(activeManagerRoot && document.contains(activeManagerRoot)){
+      renderManager({root: activeManagerRoot});
+      return;
+    }else{
+      return;
+    }
     styles();
     const root = embeddedRoot || $('#pageRoot');
     if(!root) return;
@@ -351,7 +481,8 @@ import { publishJsonToGithub } from './cms/github-publish.js';
     const query = sessionStorage.getItem('sidebar_icon_query') || '';
     const type = sessionStorage.getItem('sidebar_icon_type') || 'all';
     const config = mergedConfig();
-    const filtered = targets.filter(target => {
+    const availableTargets = allTargets();
+    const filtered = availableTargets.filter(target => {
       const typeOk = type === 'all' || target.type === type;
       const q = query.trim().toLowerCase();
       const text = [target.label, target.route, target.group, target.type].join(' ').toLowerCase();
@@ -370,6 +501,7 @@ import { publishJsonToGithub } from './cms/github-publish.js';
           <option value="all" ${type === 'all' ? 'selected' : ''}>Tất cả</option>
           <option value="Nhóm" ${type === 'Nhóm' ? 'selected' : ''}>Nhóm sidebar</option>
           <option value="Bài viết" ${type === 'Bài viết' ? 'selected' : ''}>Bài viết</option>
+          <option value="Logo card" ${type === 'Logo card' ? 'selected' : ''}>Logo card</option>
         </select>
         <button class="btn btn-primary" id="sidebarIconSaveBtn">Lưu cấu hình</button>
         <button class="btn btn-primary" id="sidebarIconPublishBtn">Publish Icons</button>
@@ -380,43 +512,59 @@ import { publishJsonToGithub } from './cms/github-publish.js';
       </div>
       <div class="sidebar-icon-grid">${filtered.map(item => card(item, config)).join('') || `<div class="sidebar-icon-empty">Không có icon phù hợp.</div>`}</div>
     </section>`;
-    bindManager();
+    bindManager(root);
   }
 
-  function bindManager(){
-    $('#sidebarIconSearch')?.addEventListener('input', event => {
+  function bindManager(root=document){
+    $('#sidebarIconSearch', root)?.addEventListener('input', event => {
       sessionStorage.setItem('sidebar_icon_query', event.target.value || '');
-      renderManager();
+      rerenderManager();
     });
-    $('#sidebarIconType')?.addEventListener('change', event => {
+    $('#sidebarIconType', root)?.addEventListener('change', event => {
       sessionStorage.setItem('sidebar_icon_type', event.target.value || 'all');
-      renderManager();
+      rerenderManager();
     });
-    $('#sidebarIconSaveBtn')?.addEventListener('click', saveConfig);
-    $('#sidebarIconPublishBtn')?.addEventListener('click', publishIcons);
-    $('#sidebarIconExportBtn')?.addEventListener('click', exportConfig);
-    $('#sidebarIconResetAllBtn')?.addEventListener('click', resetAll);
-    $('#sidebarIconImportBtn')?.addEventListener('click', () => $('#sidebarIconImportFile')?.click());
-    $('#sidebarIconImportFile')?.addEventListener('change', event => importConfig(event.target.files?.[0]));
-    $$('[data-sidebar-icon-upload]').forEach(input => {
+    $('#sidebarIconSaveBtn', root)?.addEventListener('click', saveConfig);
+    $('#sidebarIconPublishBtn', root)?.addEventListener('click', publishIcons);
+    $('#sidebarIconExportBtn', root)?.addEventListener('click', exportConfig);
+    $('#sidebarIconResetAllBtn', root)?.addEventListener('click', resetAll);
+    $('#sidebarIconImportBtn', root)?.addEventListener('click', () => $('#sidebarIconImportFile', root)?.click());
+    $('#sidebarIconImportFile', root)?.addEventListener('change', event => importConfig(event.target.files?.[0]));
+    $$('[data-sidebar-icon-upload]', root).forEach(input => {
       input.addEventListener('change', event => setIcon(input.dataset.sidebarIconUpload, event.target.files?.[0]));
     });
-    $$('[data-sidebar-icon-reset]').forEach(btn => {
+    $$('[data-sidebar-icon-reset]', root).forEach(btn => {
       btn.addEventListener('click', () => resetIcon(btn.dataset.sidebarIconReset));
     });
   }
 
   async function boot(){
     styles();
+    await loadDynamicTargets();
     await loadLocalConfig();
     await loadRemoteConfig();
+    startIconObserver();
     setTimeout(applyIcons, 250);
     setTimeout(applyIcons, 900);
     renderManager();
   }
 
+  function startIconObserver(){
+    if(iconObserver || !window.MutationObserver || !document.body) return;
+    let scheduled = false;
+    iconObserver = new MutationObserver(() => {
+      if(scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(() => {
+        scheduled = false;
+        applyIcons();
+      });
+    });
+    iconObserver.observe(document.body, {childList:true, subtree:true});
+  }
+
   window.SidebarIconRuntime = {
-    targets: () => targets.slice(),
+    targets: () => allTargets().slice(),
     apply: applyIcons,
     renderCmsPanel: root => renderManager({root}),
     exportConfig,

@@ -78,6 +78,18 @@ const DEFAULT_GROUPS = [
   {id:'group-cms-editor', name:'CMS Editors', description:'Manage CMS content without system administration.', permissions:['cms.view','cms.update','articles.view','articles.create','articles.update','products.view','products.create','products.update','assets.view','assets.create','assets.update'], modules:['cms-data','contact-center','integration','demo-sales']}
 ];
 
+const DISPLAY_NAME_OVERRIDES = {
+  admin: 'Administrators',
+  toannq: 'Quốc Toản'
+};
+
+function userDisplayName(user) {
+  if (!user) return 'Guest';
+  const username = String(user.username || '').trim();
+  if (username && DISPLAY_NAME_OVERRIDES[username]) return DISPLAY_NAME_OVERRIDES[username];
+  return user.displayName || username || 'Guest';
+}
+
 async function sha256(text) {
   const data = new TextEncoder().encode(text);
   const hash = await crypto.subtle.digest('SHA-256', data);
@@ -206,7 +218,7 @@ async function ensureDefaultUsers() {
     users.push({
       id: 'user-admin',
       username: 'admin',
-      displayName: 'Administrator',
+      displayName: 'Administrators',
       email: 'admin@local',
       role: 'admin',
       groupIds: ['group-admin'],
@@ -310,7 +322,7 @@ async function login(username, password) {
   }
   const session = {
     username: user.username,
-    displayName: user.displayName || user.username,
+    displayName: userDisplayName(user),
     role: user.role,
     groupIds: user.groupIds || [],
     loginAt: now(),
@@ -319,7 +331,7 @@ async function login(username, password) {
   setSession(session);
   addAudit('auth.login_success', {username, role:user.role, groupIds:user.groupIds || []});
   hideLogin();
-  showToast(`Đã đăng nhập: ${user.displayName || user.username}`, 'success');
+  showToast(`Đã đăng nhập: ${userDisplayName(user)}`, 'success');
 }
 
 function logout() {
@@ -345,20 +357,36 @@ function markAppReady() {
   document.body.classList.remove('app-booting');
 }
 
+function ensureHeaderLogoutButton() {
+  const logoutBtn = document.querySelector('#logoutBtn');
+  const actions = document.querySelector('.topbar-actions');
+  if (!logoutBtn || !actions) return logoutBtn;
+  logoutBtn.classList.add('topbar-logout');
+  logoutBtn.setAttribute('title', 'Đăng xuất');
+  logoutBtn.setAttribute('aria-label', 'Đăng xuất');
+  logoutBtn.type = 'button';
+  if (logoutBtn.parentElement !== actions) actions.appendChild(logoutBtn);
+  return logoutBtn;
+}
+
 function updateAuthUi() {
   const user = currentUser();
+  const logoutBtn = ensureHeaderLogoutButton();
   const chip = document.querySelector('#permissionChip');
   if (chip) {
     chip.classList.toggle('login-on', !!user);
     chip.classList.toggle('login-off', !user);
-    const groupLabel = user?.groups?.length ? user.groups.map(g => g.name).join(', ') : (ROLE_PERMISSIONS[user?.role]?.label || user?.role || '');
-    chip.textContent = user ? `Login: ON · ${user.username} · ${groupLabel}` : 'Login';
+    chip.textContent = user ? userDisplayName(user) : 'Login';
   }
+  if (logoutBtn) logoutBtn.hidden = !user;
   markAppReady();
   const footerName = document.querySelector('.user-pill strong');
   const footerRole = document.querySelector('.user-pill span');
-  if (footerName) footerName.textContent = user ? (user.displayName || user.username) : 'Guest';
-  if (footerRole) footerRole.textContent = user ? (user.groups?.map(g => g.name).join(', ') || ROLE_PERMISSIONS[user.role]?.label || user.role) : 'Not signed in';
+  if (footerName) footerName.textContent = user ? userDisplayName(user) : 'Guest';
+  if (footerRole) {
+    footerRole.textContent = '';
+    footerRole.hidden = true;
+  }
 
   document.querySelectorAll('[data-permission]').forEach(el => {
     const perm = el.getAttribute('data-permission');
@@ -380,7 +408,7 @@ function bindLoginForm() {
     catch (err) { showToast(err.message || 'Đăng nhập thất bại', 'error'); }
   });
 
-  const logoutBtn = document.querySelector('#logoutBtn');
+  const logoutBtn = ensureHeaderLogoutButton();
   if (logoutBtn) logoutBtn.onclick = null;
   logoutBtn?.addEventListener('click', evt => {
     evt.preventDefault();
@@ -946,12 +974,11 @@ window.FTIAuth = {
   function setPublicUi(){
     document.body.classList.toggle('cms-locked', !isLogged());
     const chip=document.querySelector('#permissionChip');
+    const logoutBtn=ensureHeaderLogoutButton();
     if(chip){
       if(isLogged()){
-        const s=session();
-        const u = currentUser();
-        const label = u?.groups?.length ? u.groups.map(g => g.name).join(', ') : s.role;
-        chip.textContent=`Login: ON · ${s.username} · ${label}`;
+        const user=currentUser() || session();
+        chip.textContent=userDisplayName(user);
         chip.classList.add('login-on');
         chip.classList.remove('login-guest','login-off');
       }else{
@@ -959,6 +986,7 @@ window.FTIAuth = {
         chip.classList.add('login-guest');
         chip.classList.remove('login-on','login-off');
       }
+      if(logoutBtn) logoutBtn.hidden=!isLogged();
       if(!chip.dataset.publicLoginBound){
         chip.dataset.publicLoginBound='1';
         chip.addEventListener('click', e=>{
@@ -976,9 +1004,15 @@ window.FTIAuth = {
 
     const footerName=document.querySelector('.user-pill strong');
     const footerRole=document.querySelector('.user-pill span');
-    if(!isLogged()){
+    if(isLogged()){
+      const user=currentUser() || session();
+      if(footerName) footerName.textContent=userDisplayName(user);
+    }else{
       if(footerName) footerName.textContent='Public Visitor';
-      if(footerRole) footerRole.textContent='Customer View';
+    }
+    if(footerRole){
+      footerRole.textContent='';
+      footerRole.hidden=true;
     }
     applyModuleVisibility();
   }

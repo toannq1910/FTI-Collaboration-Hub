@@ -1322,3 +1322,13 @@
   min-height:52px;
   justify-content:flex-start;
 }
+
+/* Header user/logout placement: sidebar footer no longer owns the user frame. */
+.sidebar-footer .user-pill{display:none!important}
+.sidebar-version-only,.sidebar-footer{padding:8px 12px;border-top:1px solid var(--line)}
+.sidebar-footer .version{margin-top:0}
+.topbar-logout{width:36px;height:36px;flex:0 0 auto}
+.permission-chip.login-on + .topbar-logout{display:inline-grid}
+@media(max-width:900px){
+  .topbar-logout{width:34px;height:34px}
+}
