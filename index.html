@@ -6,7 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=20260713-1">
+<link rel="stylesheet" href="css/styles.css?v=20260713-3">
 <link rel="stylesheet" href="css/cms.css?v=20260701-6">
 
 <style id="vcStaticSidebarStyle">
@@ -33,6 +33,10 @@ body.app-booting::before{content:"";position:fixed;inset:0;z-index:9998;backgrou
 body.app-booting::after{content:"";position:fixed;left:50%;top:50%;z-index:9999;width:34px;height:34px;margin:-17px 0 0 -17px;border:3px solid rgba(59,130,246,.22);border-top-color:#60a5fa;border-radius:999px;animation:ftiBootSpin .8s linear infinite}
 @keyframes ftiBootSpin{to{transform:rotate(360deg)}}
 body:not(.auth-ui-ready) #permissionChip{visibility:hidden}
+body:not(.auth-ui-ready) #logoutBtn,
+body.auth-ui-ready.auth-logged-out #logoutBtn,
+#logoutBtn[hidden]{display:none!important}
+body.auth-ui-ready.auth-logged-in #logoutBtn{display:inline-grid}
 .permission-chip.login-on{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.35);color:#86efac}
 .permission-chip.login-off{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35);color:#fca5a5}
 .auth-denied{opacity:.45;pointer-events:none;filter:grayscale(.4)}
@@ -167,7 +171,7 @@ body:not(.cms-locked) .auth-system-group{display:block!important}
 <script type="module" src="js/ai-assistant-runtime.js?v=20260707-1"></script>
 <script type="module" src="js/video-conference-complete-runtime.js?v=20260707-1"></script>
 <script type="module" src="js/cms-full-content-sync.js?v=20260707-1"></script>
-<script type="module" src="js/enterprise-auth-runtime.js?v=20260713-1"></script>
+<script type="module" src="js/enterprise-auth-runtime.js?v=20260713-3"></script>
 <script type="module" src="js/oncallcx-user-guide-runtime.js?v=20260707-1"></script>
 <script type="module" src="js/oncallcx-ucaas-api-reference-runtime.js?v=20260707-2"></script>
 </body></html>

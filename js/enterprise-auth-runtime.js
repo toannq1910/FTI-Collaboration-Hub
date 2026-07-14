@@ -56,26 +56,50 @@ const MODULE_PERMISSIONS = [
 ];
 
 const MODULE_ACCESS = [
-  {id:'contact-center', label:'Contact Center', routes:['#oncallcx','#ccaas-vn','#ccaas-global','#api-reference','#ucpbx-vn'], permissions:['contact.view','contact.edit']},
-  {id:'oncallcx', label:'Contact Center / OnCallCX', routes:['#oncallcx','#oncallcx-product-center-ccaas','#oncallcx-product-center-ucaas'], permissions:['oncallcx.view','oncallcx.edit']},
-  {id:'oncallcx-ucaas', label:'Contact Center / OnCallCX / UCaaS', routes:['#oncallcx-product-center-ucaas'], permissions:['oncallcx.ucaas.view','oncallcx.ucaas.edit']},
-  {id:'video-conference', label:'Video Conference', routes:['#video-conferencing','#vc-yealink','#vc-logitech','#vc-poly','#vc-cisco','#vc-jabra','#vc-crestron','#vc-huddle-room','#vc-medium-large-room'], permissions:['video.view','video.update']},
-  {id:'integration', label:'Integration', routes:['#integration','#crm','#compliance'], permissions:['integration.view','integration.edit']},
-  {id:'demo-sales', label:'Demo & Sales', routes:['#demo','#compare','#resources'], permissions:['demo.view','demo.edit']},
-  {id:'cms-data', label:'CMS Data', routes:['#cms'], permissions:['cms.view','cms.update','cms.publish']},
-  {id:'system-security', label:'System & Security', routes:['#users','#permissions','#audit-log'], permissions:['users.view','roles.view','audit.view']}
+  {id:'contact-center', label:'Contact Center', section:'Business modules', routes:['#oncallcx','#ccaas-vn','#ccaas-global','#api-reference','#ucpbx-vn','#oncallcx-product-center','#oncallcx-product-center-ccaas','#oncallcx-product-center-ucaas','#presentation-oncallcx','#presentation-oncallcx-ccaas','#presentation-oncallcx-ucaas'], permissions:['contact.view','contact.edit']},
+  {id:'video-conference', label:'Video Conference', section:'Business modules', routes:['#video-conferencing','#vc-yealink','#vc-logitech','#vc-poly','#vc-cisco','#vc-jabra','#vc-crestron','#vc-huddle-room','#vc-medium-large-room'], permissions:['video.view','video.update']},
+  {id:'integration', label:'Integration', section:'Business modules', routes:['#integration','#crm','#compliance'], permissions:['integration.view','integration.edit']},
+  {id:'demo-sales', label:'Demo & Sales', section:'Business modules', routes:['#demo','#compare','#resources'], permissions:['demo.view','demo.edit']},
+  {id:'cms-data', label:'CMS Data', section:'System modules', routes:['#cms'], permissions:['cms.view','cms.update','cms.publish']},
+  {id:'system-security', label:'System & Security', section:'System modules', routes:['#users','#permissions','#audit-log'], permissions:['users.view','roles.view','audit.view']}
 ];
+
+const BUSINESS_MODULE_IDS = ['contact-center','video-conference','integration','demo-sales'];
 
 const ROUTE_PERMISSIONS = MODULE_ACCESS.reduce((acc,module)=>{
   module.routes.forEach(route=>{acc[route]=module.permissions[0]});
   return acc;
 },{});
 
+const AUTH_ONLY_ROUTES = new Set(['#users', '#permissions', '#audit-log', '#enterprise-cms', '#cms', '#cms-audit']);
+
+function normalizeAuthRoute(route=''){
+  const raw = String(route || '').trim();
+  if(raw.startsWith('#api-folder:')) return '#api-reference';
+  if(raw.startsWith('#oncallcx-product-center:prod-oncallcx-ucaas') || raw.startsWith('#oncallcx-product-centerprod-oncallcx-ucaas')) return '#oncallcx-product-center-ucaas';
+  if(raw.startsWith('#oncallcx-product-center:prod-oncallcx-fpt') || raw.startsWith('#oncallcx-product-centerprod-oncallcx-fpt')) return '#oncallcx-product-center-ccaas';
+  if(raw.startsWith('#oncallcx-product-center:')) return '#oncallcx-product-center';
+  if(raw.startsWith('#presentation-oncallcx:prod-oncallcx-ucaas') || raw.startsWith('#presentation-oncallcxprod-oncallcx-ucaas')) return '#presentation-oncallcx-ucaas';
+  if(raw.startsWith('#presentation-oncallcx:prod-oncallcx-fpt') || raw.startsWith('#presentation-oncallcxprod-oncallcx-fpt')) return '#presentation-oncallcx-ccaas';
+  if(raw.startsWith('#presentation-oncallcx:')) return '#presentation-oncallcx';
+  return raw;
+}
+
+function isAuthOnlyRoute(route=''){
+  return AUTH_ONLY_ROUTES.has(normalizeAuthRoute(route));
+}
+
+function moveAuthOnlyRouteToLoginBase(){
+  if(!isAuthOnlyRoute(location.hash || '')) return false;
+  if(location.hash !== '#overview') location.hash = '#overview';
+  return true;
+}
+
 const DEFAULT_GROUPS = [
   {id:'group-admin', name:'Administrators', description:'Full system access.', permissions:['*'], modules:MODULE_ACCESS.map(m=>m.id)},
   {id:'group-video-viewer', name:'Video Viewers', description:'Only view Video Conference.', permissions:['video.view'], modules:['video-conference']},
-  {id:'group-oncallcx-editor', name:'OnCallCX Editors', description:'Edit Contact Center / OnCallCX / UCaaS.', permissions:['contact.view','oncallcx.view','oncallcx.edit','oncallcx.ucaas.view','oncallcx.ucaas.edit','cms.view','articles.view','articles.update','products.view','products.update'], modules:['contact-center','oncallcx','oncallcx-ucaas','cms-data']},
-  {id:'group-cms-editor', name:'CMS Editors', description:'Manage CMS content without system administration.', permissions:['cms.view','cms.update','articles.view','articles.create','articles.update','products.view','products.create','products.update','assets.view','assets.create','assets.update'], modules:['cms-data','contact-center','integration','demo-sales']}
+  {id:'group-oncallcx-editor', name:'OnCallCX Editors', description:'Edit Contact Center / OnCallCX / UCaaS.', permissions:['contact.view','contact.edit','cms.view','articles.view','articles.update','products.view','products.update'], modules:['contact-center','cms-data']},
+  {id:'group-cms-editor', name:'CMS Editors', description:'Manage CMS content without system administration.', permissions:['cms.view','cms.update','articles.view','articles.create','articles.update','products.view','products.create','products.update','assets.view','assets.create','assets.update','contact.view','integration.view','demo.view'], modules:['cms-data','contact-center','integration','demo-sales']}
 ];
 
 const DISPLAY_NAME_OVERRIDES = {
@@ -83,11 +107,119 @@ const DISPLAY_NAME_OVERRIDES = {
   toannq: 'Quốc Toản'
 };
 
+const ROLE_DEFAULT_GROUP = {
+  admin: 'group-admin',
+  editor: 'group-cms-editor',
+  viewer: 'group-video-viewer'
+};
+
 function userDisplayName(user) {
   if (!user) return 'Guest';
   const username = String(user.username || '').trim();
   if (username && DISPLAY_NAME_OVERRIDES[username]) return DISPLAY_NAME_OVERRIDES[username];
   return user.displayName || username || 'Guest';
+}
+
+function moduleRowsForPermissionUi(){
+  const business = BUSINESS_MODULE_IDS
+    .map(id => MODULE_ACCESS.find(module => module.id === id))
+    .filter(Boolean);
+  const system = MODULE_ACCESS.filter(module => !BUSINESS_MODULE_IDS.includes(module.id));
+  return [...business, ...system];
+}
+
+function groupHasPermission(group, permission){
+  const permissions = group?.permissions || [];
+  return permissions.includes('*') || permissions.includes(permission);
+}
+
+function deriveRoleFromGroups(groupIds=[]){
+  const groups = readGroups().filter(group => groupIds.includes(group.id));
+  const permissions = groups.flatMap(group => group.permissions || []);
+  if (permissions.includes('*')) return 'admin';
+  if (permissions.some(permission => /\.(create|update|edit|delete|publish)$/.test(permission))) return 'editor';
+  return 'viewer';
+}
+
+function effectiveRoleLabel(user){
+  const role = user?.role || deriveRoleFromGroups(user?.groupIds || []);
+  return ROLE_PERMISSIONS[role]?.label || role || 'Chưa chọn';
+}
+
+function renderRoleOptions(selectedRole=''){
+  const placeholder = `<option value="" ${selectedRole ? '' : 'selected'} disabled>Chọn quyền hiệu lực</option>`;
+  const options = Object.entries(ROLE_PERMISSIONS)
+    .map(([key, value]) => `<option value="${esc(key)}" ${selectedRole === key ? 'selected' : ''}>${esc(value.label)}</option>`)
+    .join('');
+  return `${placeholder}${options}`;
+}
+
+function renderGroupOptions(groups=[], selectedGroup=''){
+  const placeholder = `<option value="" ${selectedGroup ? '' : 'selected'} disabled>Chọn group</option>`;
+  const options = groups
+    .map(group => `<option value="${esc(group.id)}" ${selectedGroup === group.id ? 'selected' : ''}>${esc(group.name)}</option>`)
+    .join('');
+  return `${placeholder}${options}`;
+}
+
+function setGroupModuleAccess(group, moduleId, enabled){
+  const module = MODULE_ACCESS.find(item => item.id === moduleId);
+  if (!group || !module) return;
+  const modules = new Set(group.modules || []);
+  const permissions = new Set(group.permissions || []);
+  const [viewPermission, editPermission] = module.permissions || [];
+
+  if (enabled) {
+    modules.add(moduleId);
+    if (viewPermission) permissions.add(viewPermission);
+  } else {
+    modules.delete(moduleId);
+    if (viewPermission) permissions.delete(viewPermission);
+    if (editPermission) permissions.delete(editPermission);
+  }
+
+  group.modules = Array.from(modules);
+  group.permissions = Array.from(permissions);
+}
+
+function setGroupModuleEdit(group, moduleId, enabled){
+  const module = MODULE_ACCESS.find(item => item.id === moduleId);
+  if (!group || !module) return;
+  const [viewPermission, editPermission] = module.permissions || [];
+  if (!editPermission) return;
+  const modules = new Set(group.modules || []);
+  const permissions = new Set(group.permissions || []);
+
+  if (enabled) {
+    modules.add(moduleId);
+    if (viewPermission) permissions.add(viewPermission);
+    permissions.add(editPermission);
+  } else {
+    permissions.delete(editPermission);
+  }
+
+  group.modules = Array.from(modules);
+  group.permissions = Array.from(permissions);
+}
+
+function normalizeUserAccess(user){
+  if(!user) return false;
+  const before = JSON.stringify({role:user.role, groupIds:user.groupIds});
+  const role = ROLE_PERMISSIONS[user.role] ? user.role : deriveRoleFromGroups(user.groupIds || []);
+  user.role = role;
+  user.groupIds = Array.from(new Set(user.groupIds || []));
+
+  if(user.role === 'admin') {
+    if(!user.groupIds.includes('group-admin')) user.groupIds.unshift('group-admin');
+  } else {
+    user.groupIds = user.groupIds.filter(groupId => groupId !== 'group-admin');
+  }
+
+  if(!user.groupIds.length && ROLE_DEFAULT_GROUP[user.role]) {
+    user.groupIds = [ROLE_DEFAULT_GROUP[user.role]];
+  }
+
+  return before !== JSON.stringify({role:user.role, groupIds:user.groupIds});
 }
 
 async function sha256(text) {
@@ -112,12 +244,29 @@ function writeUsers(users) {
   syncUsersToCms(users).catch(()=>{});
 }
 
+function normalizeGroup(group){
+  const validModuleIds = new Set(MODULE_ACCESS.map(module => module.id));
+  const obsoletePermissions = new Set(['oncallcx.view','oncallcx.edit','oncallcx.ucaas.view','oncallcx.ucaas.edit']);
+  const normalized = {...group};
+  normalized.modules = Array.from(new Set(normalized.modules || [])).filter(moduleId => validModuleIds.has(moduleId));
+  normalized.permissions = Array.from(new Set(normalized.permissions || [])).filter(permission => !obsoletePermissions.has(permission));
+
+  const permissions = new Set(normalized.permissions);
+  normalized.modules.forEach(moduleId => {
+    const module = MODULE_ACCESS.find(item => item.id === moduleId);
+    const viewPermission = module?.permissions?.[0];
+    if(viewPermission && !permissions.has('*')) permissions.add(viewPermission);
+  });
+  normalized.permissions = Array.from(permissions);
+  return normalized;
+}
+
 function seedGroups(groups=[]){
-  const byId = new Map(groups.map(g => [g.id, g]));
+  const byId = new Map(groups.map(g => [g.id, normalizeGroup(g)]));
   DEFAULT_GROUPS.forEach(group => {
     if(!byId.has(group.id)) byId.set(group.id, {...group});
   });
-  return Array.from(byId.values());
+  return Array.from(byId.values()).map(normalizeGroup);
 }
 
 function readGroups() {
@@ -232,11 +381,17 @@ async function ensureDefaultUsers() {
   }
   let migrated = false;
   users.forEach(user => {
-    if(Array.isArray(user.groupIds)) return;
-    if(user.role === 'admin') user.groupIds = ['group-admin'];
-    else if(user.role === 'editor') user.groupIds = ['group-cms-editor'];
-    else user.groupIds = ['group-video-viewer'];
-    migrated = true;
+    if(!Array.isArray(user.groupIds)){
+      if(user.role === 'admin') user.groupIds = ['group-admin'];
+      else if(user.role === 'editor') user.groupIds = ['group-cms-editor'];
+      else user.groupIds = ['group-video-viewer'];
+      migrated = true;
+    }
+    if(!user.role || !ROLE_PERMISSIONS[user.role]){
+      user.role = deriveRoleFromGroups(user.groupIds || []);
+      migrated = true;
+    }
+    if(normalizeUserAccess(user)) migrated = true;
   });
   if(migrated) writeUsers(users);
   writeGroups(readGroups());
@@ -266,9 +421,9 @@ function currentUser() {
 function hasPermission(permission) {
   const user = currentUser();
   if (!user) return false;
+  const groupPermissions = (user.groups || []).flatMap(group => group.permissions || []);
   const role = ROLE_PERMISSIONS[user.role];
   const rolePermissions = role?.permissions || [];
-  const groupPermissions = (user.groups || []).flatMap(group => group.permissions || []);
   const permissions = new Set([...rolePermissions, ...groupPermissions]);
   return permissions.has('*') || permissions.has(permission);
 }
@@ -293,6 +448,7 @@ function showToast(message, type='info') {
 }
 
 function showLogin() {
+  moveAuthOnlyRouteToLoginBase();
   const overlay = document.querySelector('#loginOverlay');
   if (overlay) overlay.hidden = false;
 }
@@ -338,6 +494,7 @@ function logout() {
   const s = getSession();
   addAudit('auth.logout', {username:s?.username});
   setSession(null);
+  moveAuthOnlyRouteToLoginBase();
   showLogin();
 }
 
@@ -373,6 +530,8 @@ function updateAuthUi() {
   const user = currentUser();
   const logoutBtn = ensureHeaderLogoutButton();
   const chip = document.querySelector('#permissionChip');
+  document.body.classList.toggle('auth-logged-in', !!user);
+  document.body.classList.toggle('auth-logged-out', !user);
   if (chip) {
     chip.classList.toggle('login-on', !!user);
     chip.classList.toggle('login-off', !user);
@@ -475,13 +634,14 @@ function renderGuardedPage(message) {
 }
 
 function moduleForRoute(route=''){
-  return MODULE_ACCESS.find(module => module.routes.includes(route)) || null;
+  const normalized = normalizeAuthRoute(route);
+  return MODULE_ACCESS.find(module => module.routes.includes(normalized)) || null;
 }
 
 function hasWildcardPermission(user=currentUser()){
   if(!user) return false;
-  const rolePermissions = ROLE_PERMISSIONS[user.role]?.permissions || [];
   const groupPermissions = (user.groups || []).flatMap(group => group.permissions || []);
+  const rolePermissions = ROLE_PERMISSIONS[user.role]?.permissions || [];
   return rolePermissions.includes('*') || groupPermissions.includes('*');
 }
 
@@ -489,10 +649,11 @@ function canAccessRoute(route=''){
   const user = currentUser();
   if(!user) return true;
   if(hasWildcardPermission(user)) return true;
-  const module = moduleForRoute(route);
+  const normalized = normalizeAuthRoute(route);
+  const module = moduleForRoute(normalized);
   if(!module) return true;
   const hasModule = (user.groups || []).some(group => (group.modules || []).includes(module.id));
-  const required = ROUTE_PERMISSIONS[route] || module.permissions?.[0];
+  const required = ROUTE_PERMISSIONS[normalized] || module.permissions?.[0];
   return hasModule && (!required || hasPermission(required));
 }
 
@@ -511,10 +672,11 @@ function applyModuleVisibility(){
 
   document.querySelectorAll('a.nav-item[href^="#"]').forEach(link => {
     const href = link.getAttribute('href') || '';
+    const normalizedHref = normalizeAuthRoute(href);
     const permission = link.getAttribute('data-permission');
     let visible = true;
     if(loggedIn && !wildcard){
-      if(ROUTE_PERMISSIONS[href]) visible = canAccessRoute(href);
+      if(ROUTE_PERMISSIONS[normalizedHref]) visible = canAccessRoute(href);
       if(permission && !hasPermission(permission)) visible = false;
     }
     if(!loggedIn && permission) visible = false;
@@ -531,6 +693,7 @@ function applyModuleVisibility(){
 
 function guardProtectedRoutes() {
   const h = location.hash || '#overview';
+  const normalized = normalizeAuthRoute(h);
   const map = {
     '#users': 'users.view',
     '#permissions': 'roles.view',
@@ -540,7 +703,7 @@ function guardProtectedRoutes() {
     '#cms-audit': 'audit.view'
   };
   const perm = map[h];
-  const routePerm = ROUTE_PERMISSIONS[h];
+  const routePerm = ROUTE_PERMISSIONS[normalized];
   if (routePerm && currentUser() && !canAccessRoute(h)) {
     renderGuardedPage(`Route ${esc(h)} chua duoc bat trong group/module cua user hien tai.`);
     return false;
@@ -552,119 +715,9 @@ function guardProtectedRoutes() {
   return true;
 }
 
-function renderUsersPage() {
-  if (location.hash !== '#users') return;
-  if (!requirePermission('users.view')) return renderGuardedPage('Bạn cần quyền users.view.');
-  const root = document.querySelector('#pageRoot');
-  if (!root) return;
-  const users = readUsers();
-  const canWrite = hasPermission('users.create') || hasPermission('users.update');
-  document.querySelector('#pageTitle').textContent = 'Quản lý User';
-  document.querySelector('#pageSubtitle').textContent = 'Enterprise Authentication · Users';
+function renderUsersPage() { return renderUsersPageV2(); }
 
-  root.innerHTML = `<section class="auth-page-hero">
-    <span class="eyebrow">👤 User Management</span>
-    <h2>Quản lý User</h2>
-    <p>Tạo user, gán role, khóa/mở khóa và reset password. Dữ liệu user được lưu local và đồng bộ metadata vào CMS data.</p>
-    ${canWrite ? `<form id="createUserForm" class="auth-form">
-      <input name="username" placeholder="username" required>
-      <input name="displayName" placeholder="Tên hiển thị" required>
-      <input name="password" placeholder="Mật khẩu" type="password" required>
-      <select name="role">${Object.entries(ROLE_PERMISSIONS).map(([k,v])=>`<option value="${esc(k)}">${esc(v.label)}</option>`).join('')}</select>
-      <button class="btn btn-primary">+ Tạo user</button>
-    </form>` : `<p><b>Read-only:</b> bạn không có quyền tạo/sửa user.</p>`}
-  </section>
-  <section class="auth-card">
-    <h3>Danh sách User</h3>
-    <table class="auth-table">
-      <thead><tr><th>Username</th><th>Tên hiển thị</th><th>Role</th><th>Status</th><th>Created</th><th>Action</th></tr></thead>
-      <tbody>${users.map(u => `<tr>
-        <td>${esc(u.username)}</td><td>${esc(u.displayName || '')}</td>
-        <td><span class="auth-badge">${esc(ROLE_PERMISSIONS[u.role]?.label || u.role)}</span></td>
-        <td><span class="auth-badge ${u.status !== 'active' ? 'locked' : ''}">${esc(u.status)}</span></td>
-        <td>${esc((u.createdAt || '').slice(0,10))}</td>
-        <td>${u.username === 'admin' ? 'Default admin' : `<button class="btn btn-soft" data-toggle-user="${esc(u.username)}">${u.status === 'active' ? 'Lock' : 'Unlock'}</button> <button class="btn btn-soft" data-reset-user="${esc(u.username)}">Reset Pass</button>`}</td>
-      </tr>`).join('')}</tbody>
-    </table>
-  </section>`;
-
-  document.querySelector('#createUserForm')?.addEventListener('submit', async evt => {
-    evt.preventDefault();
-    if (!requirePermission('users.create')) return;
-    const fd = new FormData(evt.currentTarget);
-    const username = String(fd.get('username') || '').trim();
-    const users = readUsers();
-    if (users.some(u => u.username === username)) return showToast('Username đã tồn tại', 'warning');
-    users.push({
-      id: `user-${Date.now()}`,
-      username,
-      displayName: String(fd.get('displayName') || '').trim(),
-      role: String(fd.get('role') || 'viewer'),
-      status: 'active',
-      createdAt: now(),
-      updatedAt: now(),
-      passwordHash: await passwordHash(username, String(fd.get('password') || ''))
-    });
-    writeUsers(users);
-    addAudit('users.create', {username});
-    showToast('Đã tạo user', 'success');
-    renderUsersPage();
-  });
-
-  root.querySelectorAll('[data-toggle-user]').forEach(btn => btn.addEventListener('click', () => {
-    if (!requirePermission('users.update')) return;
-    const username = btn.getAttribute('data-toggle-user');
-    const users = readUsers();
-    const u = users.find(x => x.username === username);
-    if (u) {
-      u.status = u.status === 'active' ? 'locked' : 'active';
-      u.updatedAt = now();
-      writeUsers(users);
-      addAudit('users.toggle_status', {username, status:u.status});
-      renderUsersPage();
-    }
-  }));
-
-  root.querySelectorAll('[data-reset-user]').forEach(btn => btn.addEventListener('click', async () => {
-    if (!requirePermission('users.update')) return;
-    const username = btn.getAttribute('data-reset-user');
-    const newPass = prompt(`Nhập mật khẩu mới cho ${username}`);
-    if (!newPass) return;
-    const users = readUsers();
-    const u = users.find(x => x.username === username);
-    if (u) {
-      u.passwordHash = await passwordHash(username, newPass);
-      u.updatedAt = now();
-      writeUsers(users);
-      addAudit('users.reset_password', {username});
-      showToast('Đã reset password', 'success');
-    }
-  }));
-}
-
-function renderPermissionsPage() {
-  if (location.hash !== '#permissions') return;
-  if (!requirePermission('roles.view')) return renderGuardedPage('Bạn cần quyền roles.view.');
-  const root = document.querySelector('#pageRoot');
-  if (!root) return;
-  document.querySelector('#pageTitle').textContent = 'Phân quyền';
-  document.querySelector('#pageSubtitle').textContent = 'Role-Based Access Control';
-  const roleHeaders = Object.entries(ROLE_PERMISSIONS).map(([k,v]) => `<th>${esc(v.label)}</th>`).join('');
-  root.innerHTML = `<section class="auth-page-hero">
-    <span class="eyebrow">🛡️ RBAC</span>
-    <h2>Phân quyền User</h2>
-    <p>RBAC hiện có 3 role mặc định: Admin, Editor, Viewer. Quyền được áp dụng ở UI level cho portal tĩnh.</p>
-  </section>
-  <section class="auth-grid">
-    ${Object.entries(ROLE_PERMISSIONS).map(([k,v]) => `<article class="auth-card"><h3>${esc(v.label)}</h3><p>${esc(v.description)}</p><p><span class="auth-badge">${esc(k)}</span></p></article>`).join('')}
-  </section>
-  <section class="auth-card" style="margin-top:18px">
-    <h3>Permission Matrix</h3>
-    <table class="auth-table"><thead><tr><th>Module / Permission</th>${roleHeaders}</tr></thead><tbody>
-      ${MODULE_PERMISSIONS.flatMap(row => row.slice(1).map(perm => `<tr><td><b>${esc(row[0])}</b> · ${esc(perm)}</td>${Object.values(ROLE_PERMISSIONS).map(role => `<td>${role.permissions.includes('*') || role.permissions.includes(perm) ? '✅' : '—'}</td>`).join('')}</tr>`)).join('')}
-    </tbody></table>
-  </section>`;
-}
+function renderPermissionsPage() { return renderPermissionsPageV2(); }
 
 function renderAuditPage() {
   if (location.hash !== '#audit-log') return;
@@ -712,22 +765,24 @@ function renderUsersPageV2() {
   root.innerHTML = `<section class="auth-page-hero">
     <span class="eyebrow">User Management</span>
     <h2>Quản lý User theo Group</h2>
-    <p>Tạo user, gán user vào group và để group quyết định quyền xem/chỉnh sửa theo module.</p>
+    <p>Tạo user, chọn quyền hiệu lực và gán vào group. Quyền hiệu lực quyết định cấp Admin/Editor/Viewer; group quyết định phạm vi module được thấy và thao tác.</p>
     ${canWrite ? `<form id="createUserFormV2" class="auth-form">
       <input name="username" placeholder="username" required>
       <input name="displayName" placeholder="Tên hiển thị" required>
       <input name="password" placeholder="Mật khẩu" type="password" required>
-      <select name="role">${Object.entries(ROLE_PERMISSIONS).map(([k,v])=>`<option value="${esc(k)}">${esc(v.label)}</option>`).join('')}</select>
-      <select name="groupId">${groups.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`).join('')}</select>
+      <select name="role" required>${renderRoleOptions('')}</select>
+      <select name="groupId" required>${renderGroupOptions(groups, '')}</select>
       <button class="btn btn-primary">+ Tạo user</button>
     </form>` : `<p><b>Read-only:</b> bạn không có quyền tạo/sửa user.</p>`}
   </section>
   <section class="auth-card">
     <h3>Danh sách User</h3>
-    <table class="auth-table"><thead><tr><th>User</th><th>Role</th><th>Group</th><th>Status</th><th>Action</th></tr></thead><tbody>
+    <table class="auth-table"><thead><tr><th>User</th><th>Quyền hiệu lực</th><th>Group</th><th>Status</th><th>Action</th></tr></thead><tbody>
       ${users.map(u => `<tr>
         <td><b>${esc(u.displayName || u.username)}</b><br><small>${esc(u.username)}</small></td>
-        <td><span class="auth-badge">${esc(ROLE_PERMISSIONS[u.role]?.label || u.role)}</span></td>
+        <td>${canWrite && u.username !== 'admin'
+          ? `<select data-user-role="${esc(u.username)}">${renderRoleOptions(u.role || '')}</select>`
+          : `<span class="auth-badge">${esc(effectiveRoleLabel(u))}</span>`}</td>
         <td>${groups.map(g=>`<label class="auth-inline-check"><input type="checkbox" data-user-group="${esc(u.username)}|${esc(g.id)}" ${((u.groupIds||[]).includes(g.id))?'checked':''} ${canWrite?'':'disabled'}> ${esc(g.name)}</label>`).join('')}</td>
         <td><span class="auth-badge ${u.status !== 'active' ? 'locked' : ''}">${esc(u.status)}</span></td>
         <td>${u.username === 'admin' ? 'Default admin' : `<button class="btn btn-soft" data-toggle-user="${esc(u.username)}">${u.status === 'active' ? 'Lock' : 'Unlock'}</button> <button class="btn btn-soft" data-reset-user="${esc(u.username)}">Reset Pass</button>`}</td>
@@ -740,19 +795,25 @@ function renderUsersPageV2() {
     if (!requirePermission('users.create')) return;
     const fd = new FormData(evt.currentTarget);
     const username = String(fd.get('username') || '').trim();
+    const role = String(fd.get('role') || '').trim();
+    const groupId = String(fd.get('groupId') || '').trim();
     const users = readUsers();
+    if (!role || !ROLE_PERMISSIONS[role]) return showToast('Vui lòng chọn quyền hiệu lực.', 'warning');
+    if (!groupId || !groups.some(group => group.id === groupId)) return showToast('Vui lòng chọn group.', 'warning');
     if (users.some(u => u.username === username)) return showToast('Username đã tồn tại', 'warning');
-    users.push({
+    const nextUser = {
       id: `user-${Date.now()}`,
       username,
       displayName: String(fd.get('displayName') || '').trim(),
-      role: String(fd.get('role') || 'viewer'),
-      groupIds: [String(fd.get('groupId') || 'group-video-viewer')],
+      role,
+      groupIds: [groupId],
       status: 'active',
       createdAt: now(),
       updatedAt: now(),
       passwordHash: await passwordHash(username, String(fd.get('password') || ''))
-    });
+    };
+    normalizeUserAccess(nextUser);
+    users.push(nextUser);
     writeUsers(users);
     addAudit('users.create', {username});
     showToast('Đã tạo user', 'success');
@@ -768,11 +829,33 @@ function renderUsersPageV2() {
     const set = new Set(user.groupIds || []);
     if(input.checked) set.add(groupId); else set.delete(groupId);
     user.groupIds = Array.from(set);
+    if(groupId === 'group-admin' && input.checked) user.role = 'admin';
+    if(groupId === 'group-admin' && !input.checked && user.role === 'admin' && user.username !== 'admin') user.role = 'editor';
+    normalizeUserAccess(user);
     user.updatedAt = now();
     writeUsers(users);
     addAudit('users.update_groups', {username, groupIds:user.groupIds});
     updateAuthUi();
     showToast('Đã cập nhật group cho user.', 'success');
+    renderUsersPageV2();
+  }));
+
+  root.querySelectorAll('[data-user-role]').forEach(select => select.addEventListener('change', () => {
+    if (!requirePermission('users.update')) return;
+    const username = select.getAttribute('data-user-role');
+    const role = String(select.value || '').trim();
+    if (!role || !ROLE_PERMISSIONS[role]) return showToast('Quyền hiệu lực không hợp lệ.', 'warning');
+    const users = readUsers();
+    const user = users.find(x => x.username === username);
+    if(!user || user.username === 'admin') return;
+    user.role = role;
+    normalizeUserAccess(user);
+    user.updatedAt = now();
+    writeUsers(users);
+    addAudit('users.update_role', {username, role});
+    updateAuthUi();
+    showToast('Đã cập nhật quyền hiệu lực user.', 'success');
+    renderUsersPageV2();
   }));
 
   root.querySelectorAll('[data-toggle-user]').forEach(btn => btn.addEventListener('click', () => {
@@ -802,6 +885,20 @@ function renderUsersPageV2() {
     addAudit('users.reset_password', {username});
     showToast('Đã reset password', 'success');
   }));
+}
+
+function renderModuleAccessCell(group, module, canUpdate){
+  const [viewPermission, editPermission] = module.permissions || [];
+  const modules = group.modules || [];
+  const viewChecked = modules.includes(module.id) && groupHasPermission(group, viewPermission);
+  const editChecked = editPermission ? groupHasPermission(group, editPermission) : false;
+  const disabled = canUpdate ? '' : 'disabled';
+  return `<td>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      <label class="auth-inline-check"><input type="checkbox" data-group-module="${esc(group.id)}|${esc(module.id)}" ${viewChecked ? 'checked' : ''} ${disabled}> Xem</label>
+      ${editPermission ? `<label class="auth-inline-check"><input type="checkbox" data-group-module-edit="${esc(group.id)}|${esc(module.id)}" ${editChecked ? 'checked' : ''} ${disabled}> Sửa</label>` : ''}
+    </div>
+  </td>`;
 }
 
 function renderPermissionsPageV2() {
@@ -834,9 +931,10 @@ function renderPermissionsPageV2() {
     ${groups.map(g => `<article class="auth-card"><h3>${esc(g.name)}</h3><p>${esc(g.description || '')}</p><p><span class="auth-badge">${esc(g.id)}</span></p></article>`).join('')}
   </section>
   <section class="auth-card" style="margin-top:18px">
-    <h3>Module visibility</h3>
+    <h3>Quyền theo module</h3>
+    <p class="muted">Điều chỉnh nhanh quyền xem/sửa cho các module chính: Contact Center, Video Conference, Integration, Demo & Sales. Các module hệ thống vẫn nằm bên dưới để quản trị CMS và bảo mật.</p>
     <table class="auth-table"><thead><tr><th>Module</th>${groups.map(g=>`<th>${esc(g.name)}</th>`).join('')}</tr></thead><tbody>
-      ${MODULE_ACCESS.map(module => `<tr><td><b>${esc(module.label)}</b><br><small>${esc(module.routes.join(', '))}</small></td>${groups.map(g=>`<td><label class="auth-inline-check"><input type="checkbox" data-group-module="${esc(g.id)}|${esc(module.id)}" ${((g.modules||[]).includes(module.id))?'checked':''} ${canUpdate?'':'disabled'}> Hiển thị</label></td>`).join('')}</tr>`).join('')}
+      ${moduleRowsForPermissionUi().map(module => `<tr><td><b>${esc(module.label)}</b><br><small>${esc(module.section || '')}</small></td>${groups.map(g=>renderModuleAccessCell(g,module,canUpdate)).join('')}</tr>`).join('')}
     </tbody></table>
   </section>
   <section class="auth-card" style="margin-top:18px">
@@ -881,12 +979,26 @@ function renderPermissionsPageV2() {
     const groups = readGroups();
     const group = groups.find(g => g.id === groupId);
     if(!group) return;
-    const set = new Set(group.modules || []);
-    if(input.checked) set.add(moduleId); else set.delete(moduleId);
-    group.modules = Array.from(set);
+    setGroupModuleAccess(group, moduleId, input.checked);
     writeGroups(groups);
     addAudit('roles.update_group_module', {groupId, moduleId, enabled:input.checked});
+    updateAuthUi();
     applyModuleVisibility();
+    renderPermissionsPageV2();
+  }));
+
+  root.querySelectorAll('[data-group-module-edit]').forEach(input => input.addEventListener('change', () => {
+    if(!requirePermission('roles.update')) return;
+    const [groupId, moduleId] = String(input.getAttribute('data-group-module-edit') || '').split('|');
+    const groups = readGroups();
+    const group = groups.find(g => g.id === groupId);
+    if(!group) return;
+    setGroupModuleEdit(group, moduleId, input.checked);
+    writeGroups(groups);
+    addAudit('roles.update_group_module_edit', {groupId, moduleId, enabled:input.checked});
+    updateAuthUi();
+    applyModuleVisibility();
+    renderPermissionsPageV2();
   }));
 
   root.querySelectorAll('[data-group-permission]').forEach(input => input.addEventListener('change', () => {
@@ -968,15 +1080,19 @@ window.FTIAuth = {
     if(overlay) overlay.hidden=true;
   }
   function showLoginOverlay(){
+    moveAuthOnlyRouteToLoginBase();
     const overlay=document.querySelector('#loginOverlay');
     if(overlay) overlay.hidden=false;
   }
   function setPublicUi(){
-    document.body.classList.toggle('cms-locked', !isLogged());
+    const loggedIn = isLogged();
+    document.body.classList.toggle('cms-locked', !loggedIn);
+    document.body.classList.toggle('auth-logged-in', loggedIn);
+    document.body.classList.toggle('auth-logged-out', !loggedIn);
     const chip=document.querySelector('#permissionChip');
     const logoutBtn=ensureHeaderLogoutButton();
     if(chip){
-      if(isLogged()){
+      if(loggedIn){
         const user=currentUser() || session();
         chip.textContent=userDisplayName(user);
         chip.classList.add('login-on');
@@ -986,7 +1102,7 @@ window.FTIAuth = {
         chip.classList.add('login-guest');
         chip.classList.remove('login-on','login-off');
       }
-      if(logoutBtn) logoutBtn.hidden=!isLogged();
+      if(logoutBtn) logoutBtn.hidden=!loggedIn;
       if(!chip.dataset.publicLoginBound){
         chip.dataset.publicLoginBound='1';
         chip.addEventListener('click', e=>{
@@ -994,7 +1110,9 @@ window.FTIAuth = {
           if(isLogged()){
             if(confirm('Bạn muốn đăng xuất?')){
               localStorage.removeItem('fti_auth_session');
+              moveAuthOnlyRouteToLoginBase();
               setPublicUi();
+              showLoginOverlay();
             }
           }else showLoginOverlay();
         });
@@ -1004,7 +1122,7 @@ window.FTIAuth = {
 
     const footerName=document.querySelector('.user-pill strong');
     const footerRole=document.querySelector('.user-pill span');
-    if(isLogged()){
+    if(loggedIn){
       const user=currentUser() || session();
       if(footerName) footerName.textContent=userDisplayName(user);
     }else{
@@ -1042,7 +1160,7 @@ window.FTIAuth = {
       openProtectedNotice(required);
       return false;
     }
-    const routePermission=ROUTE_PERMISSIONS[hash];
+    const routePermission=ROUTE_PERMISSIONS[normalizeAuthRoute(hash)];
     if(routePermission && isLogged() && !canAccessRoute(hash)){
       openProtectedNotice(routePermission);
       return false;
@@ -1079,7 +1197,7 @@ window.FTIAuth = {
           setTimeout(()=>openProtectedNotice(protectedPermission),30);
           return;
         }
-        const routePermission = ROUTE_PERMISSIONS[href];
+        const routePermission = ROUTE_PERMISSIONS[normalizeAuthRoute(href)];
         if(routePermission && isLogged() && !canAccessRoute(href)){
           e.preventDefault();
           e.stopPropagation();
@@ -1104,17 +1222,31 @@ window.FTIAuth = {
       }, true);
     });
 
-    // Hamburger collapse/expand
-    document.querySelectorAll('#sidebarToggle,#mobileMenu').forEach(btn=>{
-      if(btn.dataset.v1081Bound) return;
-      btn.dataset.v1081Bound='1';
-      btn.addEventListener('click', e=>{
+    // Desktop: collapse/expand sidebar. Mobile: open/close drawer only.
+    const sidebarToggle=document.querySelector('#sidebarToggle');
+    if(sidebarToggle && !sidebarToggle.dataset.v1081Bound){
+      sidebarToggle.dataset.v1081Bound='1';
+      sidebarToggle.addEventListener('click', e=>{
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
         shell?.classList.toggle('sidebar-collapsed');
         document.body.classList.toggle('sidebar-collapsed');
       }, true);
-    });
+    }
+
+    const mobileMenu=document.querySelector('#mobileMenu');
+    if(mobileMenu && !mobileMenu.dataset.v1081Bound){
+      mobileMenu.dataset.v1081Bound='1';
+      mobileMenu.addEventListener('click', e=>{
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        shell?.classList.remove('sidebar-collapsed');
+        document.body.classList.remove('sidebar-collapsed');
+        sidebar.classList.toggle('open');
+      }, true);
+    }
   }
 
   function markActive(){

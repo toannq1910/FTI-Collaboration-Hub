@@ -1332,3 +1332,47 @@
 @media(max-width:900px){
   .topbar-logout{width:34px;height:34px}
 }
+
+/* Collapsed/sidebar responsive fixes. */
+.app-shell.sidebar-collapsed .main{margin-left:76px!important}
+.app-shell.sidebar-collapsed .brand{justify-content:center;position:relative;padding:10px 8px!important}
+.app-shell.sidebar-collapsed .brand img{width:42px!important;height:32px!important}
+.app-shell.sidebar-collapsed .sidebar-toggle{display:inline-grid!important;position:absolute;right:-18px;top:16px;width:32px;height:32px;z-index:30;background:#16233a;box-shadow:0 10px 24px rgba(0,0,0,.28)}
+.app-shell.sidebar-collapsed .nav-group-head i{display:none!important}
+.app-shell.sidebar-collapsed .nav-group-head,
+.app-shell.sidebar-collapsed .nav-item{padding:10px 0!important;gap:0!important}
+.app-shell.sidebar-collapsed .nav-group-head>span,
+.app-shell.sidebar-collapsed .nav-item>span{margin:0!important}
+@media(max-width:900px){
+  .app-shell.sidebar-collapsed .main{margin-left:0!important}
+  .app-shell.sidebar-collapsed .sidebar{transform:translateX(-100%)!important}
+  .app-shell.sidebar-collapsed .sidebar-toggle{display:none!important}
+  .sidebar.open{transform:translateX(0)!important}
+  .main{margin-left:0!important}
+  .topbar{gap:10px}
+  .topbar>div:first-of-type{min-width:0}
+  .topbar h1,.topbar p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:42vw}
+  .topbar-actions{gap:8px}
+  .permission-chip{max-width:34vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
+
+@media(min-width:901px){
+  .app-shell.sidebar-collapsed .sidebar{transition:width .18s ease,box-shadow .18s ease}
+  .app-shell.sidebar-collapsed .sidebar:hover{width:var(--sidebar-w)!important;min-width:var(--sidebar-w)!important;max-width:var(--sidebar-w)!important;box-shadow:18px 0 44px rgba(0,0,0,.35)}
+  .app-shell.sidebar-collapsed .sidebar:hover .brand{justify-content:flex-start;padding:12px 14px!important}
+  .app-shell.sidebar-collapsed .sidebar:hover .brand img{width:54px!important;height:36px!important}
+  .app-shell.sidebar-collapsed .sidebar:hover .sidebar-toggle{position:static;width:36px;height:36px;margin-left:auto;box-shadow:none}
+  .app-shell.sidebar-collapsed .sidebar:hover .brand div,
+  .app-shell.sidebar-collapsed .sidebar:hover .nav-group-head div,
+  .app-shell.sidebar-collapsed .sidebar:hover .nav-item b,
+  .app-shell.sidebar-collapsed .sidebar:hover .nav-item em,
+  .app-shell.sidebar-collapsed .sidebar:hover .nav-section-label,
+  .app-shell.sidebar-collapsed .sidebar:hover .sidebar-footer{display:block!important}
+  .app-shell.sidebar-collapsed .sidebar:hover .nav-group.expanded>.nav-group-body{display:block!important}
+  .app-shell.sidebar-collapsed .sidebar:hover .nav-group:not(.expanded)>.nav-group-body{display:none!important}
+  .app-shell.sidebar-collapsed .sidebar:hover .nav-group-head i{display:block!important}
+  .app-shell.sidebar-collapsed .sidebar:hover .nav-group-head,
+  .app-shell.sidebar-collapsed .sidebar:hover .nav-item{justify-content:flex-start!important;gap:10px!important;padding:10px!important}
+  .app-shell.sidebar-collapsed .sidebar:hover .nav-group-head>span,
+  .app-shell.sidebar-collapsed .sidebar:hover .nav-item>span{margin:0!important}
+}
